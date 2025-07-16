@@ -46,8 +46,8 @@ export default function Header() {
                 </a>
 
                 {/* NAVEGAÇÃO DESKTOP */}
-                {/* A classe foi alterada para font-display para usar a fonte Inter */}
-                <nav className="hidden md:flex gap-8 font-display text-[18px] font-bold tracking-wide uppercase text-black">
+                {/* A classe foi alterada para font-heading para usar a fonte Anton */}
+                <nav className="hidden md:flex gap-8 font-heading text-[18px] font-normal tracking-wider uppercase text-black">
                     {navItems.map(({ href, label }) => (
                         <a key={href} href={href} className="hover:text-green-600 transition">
                             {label}
@@ -73,8 +73,8 @@ export default function Header() {
                     menuOpen ? 'translate-x-0' : '-translate-x-full'
                 )}
             >
-                {/* A classe foi alterada para font-display para usar a fonte Inter */}
-                <div className="flex flex-col items-center justify-center h-full gap-8 font-display text-[22px] font-bold text-black tracking-widest uppercase">
+                {/* A classe foi alterada para font-heading para usar a fonte Anton */}
+                <div className="flex flex-col items-center justify-center h-full gap-8 font-heading text-[22px] font-normal text-black tracking-widest uppercase">
                     {navItems.map(({ href, label }) => (
                         <a
                             key={href}

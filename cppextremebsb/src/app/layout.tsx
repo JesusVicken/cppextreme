@@ -1,8 +1,8 @@
 // app/layout.tsx
 
 import type { Metadata } from "next"
-// 1. A fonte "Inter" foi importada
-import { Geist, Geist_Mono, Inter } from "next/font/google"
+// 1. A nova fonte "Anton" foi importada
+import { Geist, Geist_Mono, Inter, Anton } from "next/font/google"
 import "./globals.css"
 import { AosInit } from "./_components/aos-init"
 import { ParallaxWrapper } from "./_components/ParallaxWrapper"
@@ -17,12 +17,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-// 2. A fonte "Inter" foi configurada com sua própria variável CSS
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "700", "900"], // Pesos da fonte que você pode usar
+  weight: ["400", "700", "900"],
 })
+
+// 2. A fonte "Anton" foi configurada com sua própria variável CSS
+const anton = Anton({
+  variable: "--font-heading", // Vamos usar essa variável para os títulos/menu
+  subsets: ["latin"],
+  weight: "400", // Anton geralmente só tem o peso 400
+})
+
 
 export const metadata: Metadata = {
   title: "CPP Extreme BSB",
@@ -41,7 +48,7 @@ export default function RootLayout({
     <html lang="en">
       {/* 3. A variável da nova fonte foi adicionada ao body */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${anton.variable} antialiased`}
       >
         <ParallaxWrapper>
           {children}
