@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image' // Importado o componente Image
 import { Menu, X } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -38,10 +39,14 @@ export default function Header() {
             <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
                 {/* LOGO */}
                 <a href="/" className="z-50">
-                    <img
+                    {/* Alterado para usar o componente Image do Next.js */}
+                    <Image
                         src="/logo3.png"
                         alt="Logo CPP Extreme"
-                        className="object-contain w-48 md:w-64" // Ajuste de tamanho para responsividade
+                        width={250} // Largura original da imagem
+                        height={160} // Altura original da imagem
+                        className="object-contain w-48 md:w-64 h-auto" // Ajuste de tamanho para responsividade
+                        priority // Otimiza o carregamento da imagem principal
                     />
                 </a>
 
