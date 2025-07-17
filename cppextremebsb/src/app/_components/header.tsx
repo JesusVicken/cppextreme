@@ -20,6 +20,7 @@ export default function Header() {
         { href: '/', label: 'Home' },
         { href: '#sobre', label: 'CPP Extreme Brasília' },
         { href: '#modalidades', label: 'Modalidades' },
+        { href: '#mobilizadores', label: 'Mobilizadores' },
         { href: '#planos', label: 'Planos' },
         { href: '#contato', label: 'Contato' },
     ]
