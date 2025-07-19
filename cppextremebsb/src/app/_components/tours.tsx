@@ -60,10 +60,10 @@ const services = [
     },
     {
         title: "Experiências EXTREME",
-        description: "Experiências de aventura com atividades como canionismo, trilhas, rapel e outras emocionantes atividades que estamos preparamos para você.",
-        duration: "EM BREVE AS PROGRAMAÇÕES",
+        description: "Experiência de aventuras com diversos graus de dificuldade. Explore Rios, Cânions e Cavernas com segurança.",
+        duration: "Clique e saiba mais",
         icon: <Mountain className="w-6 h-6 text-white" />,
-        linkText: "Olá, vi no site sobre a remada da lua cheia e gostaria de mais informações.",
+        linkText: "Olá, vi no site sobre a remada da lua cheia e gostaria de mais informações sobre a experiência Extreme.",
         image: experienciaImg
     }
 ]

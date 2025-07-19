@@ -67,21 +67,32 @@ export default function ContatosPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
                     {/* Sobre */}
-                    <div data-aos="fade-up-left">
-                        <h3 className="text-2xl font-semibold mb-4">CPP Extreme Brasília</h3>
-                        <p className="text-gray-700 mb-5 leading-relaxed">
+                    <div data-aos="fade-up-left" className="flex flex-col items-center text-center">
+                        <div className="mb-6 w-full flex justify-center">
+                            <Image
+                                src="/logocpp.png"
+                                alt="Logo CPP Extreme"
+                                width={300}
+                                height={225}
+                                className="w-auto h-32 md:h-24 object-contain"
+                                priority
+                            />
+                        </div>
+                        <p className="text-gray-700 mb-6 leading-relaxed max-w-md">
                             Promovendo inclusão social através do esporte e aventura.
                         </p>
-                        <a
-                            href={whatsappLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 transition text-white font-semibold px-5 py-2 rounded-lg"
-                            aria-label="Contato via WhatsApp"
-                        >
-                            <FaWhatsapp className="w-5 h-5" />
-                            Contato via WhatsApp
-                        </a>
+                        <div className="w-full flex justify-center">
+                            <a
+                                href={whatsappLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 transition text-white font-semibold px-6 py-3 rounded-lg text-lg"
+                                aria-label="Contato via WhatsApp"
+                            >
+                                <FaWhatsapp className="w-6 h-6" />
+                                Contato via WhatsApp
+                            </a>
+                        </div>
                     </div>
 
                     {/* Contatos */}
@@ -103,7 +114,7 @@ export default function ContatosPage() {
                     {/* Redes Sociais */}
                     <div data-aos="fade-up-right">
                         <h3 className="text-2xl font-semibold mb-4">Redes Sociais</h3>
-                        <div className="flex gap-5 mt-2">
+                        <div className="flex gap-5 mt-2 justify-center md:justify-start">
                             <a
                                 href="https://www.facebook.com/CPPExtreme"
                                 target="_blank"
