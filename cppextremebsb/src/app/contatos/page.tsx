@@ -37,7 +37,7 @@ export default function ContatosPage() {
 
     return (
         <section className="bg-white text-black min-h-screen">
-            <div className="container mx-auto px-4 py-16 space-y-20">
+            <div className="container mx-auto px-4 py-22 space-y-20">
 
                 {/* Parceiros */}
                 <div data-aos="fade-up" className="space-y-12">
