@@ -55,7 +55,7 @@ export default function Header() {
                             alt="Logo CPP Extreme"
                             width={300}
                             height={192}
-                            className="object-contain w-48 sm:w-52 md:w-48 lg:w-56 h-auto"
+                            className="object-contain h-8 md:h-auto w-auto"
                             priority
                         />
                     </Link>
@@ -73,7 +73,6 @@ export default function Header() {
                         ))}
                     </nav>
 
-                    {/* Menu Mobile com Sheet do ShadCN */}
                     <div className="md:hidden z-50">
                         <Sheet>
                             <SheetTrigger asChild>
@@ -86,7 +85,10 @@ export default function Header() {
                                     <Menu className="h-6 w-6" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-[260px] sm:w-[300px]">
+                            <SheetContent
+                                side="right"
+                                className="w-[260px] sm:w-[300px]"
+                            >
                                 <SheetHeader>
                                     <SheetTitle className="text-left font-bold text-lg tracking-wide">
                                         Menu
