@@ -8,27 +8,18 @@ import CheckVaa from "./_components/checkVaa"
 import { ParallaxWrapper } from "./_components/ParallaxWrapper"
 import FooterDev from "./_components/footer-dev"
 import WhatsappWrapper from "./_components/whatsapp-wrapper"
-import Header from "./_components/header"
-import Image from "next/image"
 
 export default function Home() {
   return (
     <main>
-      <Header />
-      {/* Conteúdo principal */}
-      <section className="relative h-screen">
-        <Image
-          src="/canoa1.jpg"
-          alt="Imagem da canoa"
-          fill
-          priority
-          className="object-cover object-center"
-        />
-      </section>
+      {/* Header agora contém a imagem de fundo da canoa */}
+      
 
+      {/* Conteúdo abaixo do header */}
       <ParallaxWrapper>
         <Projects />
       </ParallaxWrapper>
+
       <Hero />
       <About />
 

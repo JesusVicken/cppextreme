@@ -6,6 +6,8 @@ import { Geist, Geist_Mono, Inter, Anton } from "next/font/google"
 import "./globals.css"
 import { AosInit } from "./_components/aos-init"
 import { ParallaxWrapper } from "./_components/ParallaxWrapper"
+import Header from "./_components/header"
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +52,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${anton.variable} antialiased`}
       >
+        <Header />
         <ParallaxWrapper>
           {children}
           <AosInit />
