@@ -26,7 +26,7 @@ export default function Header() {
     const navItems = [
         { href: '/', label: 'Home' },
         { href: '#sobre', label: 'CPP Extreme Brasília' },
-        { href: '#modalidades', label: 'Modalidades' },
+        { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },
         { href: '/contatos', label: 'Contato' },
