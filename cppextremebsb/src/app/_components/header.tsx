@@ -29,7 +29,7 @@ export default function Header() {
         { href: '#modalidades', label: 'Modalidades' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },
-        { href: '#contato', label: 'Contato' },
+        { href: '/contatos', label: 'Contato' },
     ]
 
     return (
