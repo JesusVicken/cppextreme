@@ -42,7 +42,6 @@ export default function ContatosPage() {
                 {/* Parceiros */}
                 <div data-aos="fade-up" className="space-y-12">
                     <h2 className="text-3xl md:text-4xl font-bold text-center flex items-center justify-center gap-2 text-black">
-                        <Anchor className="w-6 h-6 md:w-8 md:h-8" />
                         Nossos Parceiros
                     </h2>
 

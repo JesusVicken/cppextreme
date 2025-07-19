@@ -13,15 +13,22 @@ import {
 } from '@/components/ui/sheet'
 import { Separator } from '@/components/ui/separator'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
+    const [open, setOpen] = useState(false) 
+    const pathname = usePathname()
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10)
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
+
+    useEffect(() => {
+        setOpen(false) 
+    }, [pathname])
 
     const navItems = [
         { href: '/', label: 'Home' },
@@ -33,7 +40,12 @@ export default function Header() {
     ]
 
     return (
-        <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 shadow-sm backdrop-blur-md' : 'bg-transparent'}`}>
+        <header
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
+                    ? 'bg-white/90 shadow-sm backdrop-blur-md'
+                    : 'bg-transparent'
+                }`}
+        >
             <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 md:py-4">
                 <Link href="/" className="z-50">
                     <Image
@@ -59,8 +71,9 @@ export default function Header() {
                     ))}
                 </nav>
 
+                {/* Menu Mobile */}
                 <div className="md:hidden z-50">
-                    <Sheet>
+                    <Sheet open={open} onOpenChange={setOpen}>
                         <SheetTrigger asChild>
                             <Button
                                 variant="ghost"
@@ -83,6 +96,7 @@ export default function Header() {
                                     <Link
                                         key={href}
                                         href={href}
+                                        onClick={() => setOpen(false)}
                                         className="px-3 py-2 rounded-md text-sm font-medium hover:bg-accent hover:text-primary transition-colors"
                                     >
                                         {label}
