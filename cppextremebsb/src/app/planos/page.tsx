@@ -23,50 +23,71 @@ export default function PlanosSection() {
 
     const planos = [
         {
-            nome: 'Plano Anual',
-            descricao: 'Para quem quer consistência e economia',
-            preco: 'R$ 279',
+            nome: '2X Semana',
+            descricao: 'Ideal para quem está começando',
+            preco: 'R$ 265',
+            periodo: '/mês',
+            destaque: false,
+            imagem: '/canoa1.jpg',
+            beneficios: [
+                '2 remadas semanais',
+                'Acesso aos horários regulares',
+                'Equipamentos inclusos',
+                'Participação em eventos',
+                'Acompanhamento básico'
+            ],
+        },
+        {
+            nome: '3X Semana',
+            descricao: 'Para evolução técnica acelerada',
+            preco: 'R$ 285',
             periodo: '/mês',
             destaque: true,
-            imagem: '/canoa4.jpg', // ← Substitua pelo nome do arquivo
+            imagem: '/canoa2.jpg',
             beneficios: [
-                'Acesso ilimitado às aulas',
-                'Remadas com instrutor 3x por semana',
-                'Equipamentos inclusos (colete, remo e canoa)',
-                'Participação gratuita em eventos mensais',
-                'Acompanhamento técnico contínuo',
+                '3 remadas semanais',
+                'Todos os horários disponíveis',
+                'Equipamentos premium',
+                'Prioridade em eventos',
+                'Acompanhamento técnico'
             ],
         },
         {
-            nome: 'Plano Semestral',
-            descricao: 'Equilíbrio entre flexibilidade e foco',
-            preco: 'R$ 298',
+            nome: 'Plano Livre',
+            descricao: 'Remadas ilimitadas',
+            preco: 'R$ 350',
             periodo: '/mês',
             destaque: false,
-            imagem: '/canoa3.jpg', // ← Substitua pelo nome do arquivo
+            imagem: '/canoa3.jpg',
             beneficios: [
-                '8 remadas mensais com agendamento',
-                'Uso de equipamentos compartilhados',
-                'Participação em eventos mensais',
-                'Treinos em grupo com acompanhamento',
-                'Desconto em workshops e viagens',
+                'Remadas ilimitadas',
+                'Todos os horários',
+                'Equipamentos premium',
+                'Participação gratuita em eventos',
+                'Acompanhamento personalizado'
             ],
+        },
+    ]
+
+    const planosAvulsos = [
+        {
+            nome: '5 Remadas Avulsas',
+            preco: 'R$ 185',
+            periodo: '/pacote',
+            beneficios: ['Validade de 3 meses']
         },
         {
-            nome: 'Plano Trimestral',
-            descricao: 'Para quem quer experimentar com liberdade',
-            preco: 'R$ 333',
-            periodo: '/mês',
-            destaque: false,
-            imagem: '/canoa2.jpg', // ← Substitua pelo nome do arquivo
-            beneficios: [
-                '4 remadas mensais',
-                'Uso de equipamentos básicos inclusos',
-                'Participação em eventos locais',
-                'Treinos nos fins de semana',
-                'Suporte técnico inicial',
-            ],
+            nome: '10 Remadas Avulsas',
+            preco: 'R$ 355',
+            periodo: '/pacote',
+            beneficios: ['Validade de 6 meses']
         },
+        {
+            nome: 'Youipe Kids',
+            preco: 'R$ 200',
+            periodo: '/mês',
+            beneficios: ['Taxa de matrícula: R$ 70']
+        }
     ]
 
     return (
@@ -85,13 +106,13 @@ export default function PlanosSection() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Planos Principais */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                     {planos.map((plano, index) => (
                         <div key={index} data-aos="fade-up" data-aos-delay={200 + index * 100}>
                             <Card
                                 className={`h-full flex flex-col border-2 transition-all duration-300 hover:shadow-lg overflow-hidden ${plano.destaque ? 'border-primary shadow-md' : 'border-gray-200'}`}
                             >
-                                {/* Imagem do plano */}
                                 <div className="relative h-48 w-full">
                                     <Image
                                         src={plano.imagem}
@@ -112,7 +133,7 @@ export default function PlanosSection() {
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <h3 className="text-2xl font-bold text-gray-900">{plano.nome}</h3>
-                                            <p className="text-gray-600">{plano.descricao}</p>
+                                            <p className="text-gray-600 text-sm">{plano.descricao}</p>
                                         </div>
                                     </div>
                                 </CardHeader>
@@ -120,14 +141,14 @@ export default function PlanosSection() {
                                 <CardContent className="flex-1">
                                     <div className="mb-6">
                                         <span className="text-4xl font-bold text-gray-900">{plano.preco}</span>
-                                        <span className="text-gray-600">{plano.periodo}</span>
+                                        <span className="text-gray-600 text-lg">{plano.periodo}</span>
                                     </div>
 
                                     <ul className="space-y-3">
                                         {plano.beneficios.map((beneficio, i) => (
-                                            <li key={i} className="flex items-center gap-2">
-                                                <Check className="h-4 w-4 text-primary" />
-                                                <span className="text-gray-700">{beneficio}</span>
+                                            <li key={i} className="flex items-start gap-2">
+                                                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                                                <span className="text-gray-700 text-sm">{beneficio}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -148,8 +169,78 @@ export default function PlanosSection() {
                     ))}
                 </div>
 
+                {/* Planos Avulsos */}
+                <div className="mb-16" data-aos="fade-up">
+                    <h3 className="text-2xl font-bold text-center mb-8">Planos Avulsos e Kids</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {planosAvulsos.map((plano, index) => (
+                            <div key={index} className="flex flex-col items-center bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                                <h4 className="text-xl font-bold text-gray-900 mb-2">{plano.nome}</h4>
+                                <div className="mb-4 text-center">
+                                    <span className="text-3xl font-bold text-gray-900">{plano.preco}</span>
+                                    <span className="text-gray-600">{plano.periodo}</span>
+                                </div>
+                                <ul className="space-y-2 mb-6">
+                                    {plano.beneficios.map((beneficio, i) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                                            <Check className="h-4 w-4 text-primary" />
+                                            {beneficio}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <Button
+                                    size="sm"
+                                    className="w-full mt-auto"
+                                    onClick={() => window.open(whatsappLink, '_blank')}
+                                >
+                                    Contratar
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Horários */}
+                <div className="mb-16" data-aos="fade-up">
+                    <h3 className="text-2xl font-bold text-center mb-8">Nossos Horários</h3>
+                    <div className="bg-white rounded-lg border border-gray-200 p-6 max-w-2xl mx-auto">
+                        <div className="grid grid-cols-6 gap-2 text-sm">
+                            {/* Dias */}
+                            <div className="font-bold text-center">SEG</div>
+                            <div className="font-bold text-center">TER</div>
+                            <div className="font-bold text-center">QUA</div>
+                            <div className="font-bold text-center">QUI</div>
+                            <div className="font-bold text-center">SEX</div>
+                            <div className="font-bold text-center">SÁB</div>
+
+                            {/* Horários */}
+                            <div className="text-center">6:20</div>
+                            <div className="text-center">6:20</div>
+                            <div className="text-center">6:20</div>
+                            <div className="text-center">6:00</div>
+                            <div className="text-center">6:20</div>
+                            <div className="text-center">T.630</div>
+
+                            <div className="text-center">7:40</div>
+                            <div className="text-center">7:40</div>
+                            <div className="text-center">7:40</div>
+                            <div className="text-center">7:40</div>
+                            <div className="text-center">7:40</div>
+                            <div className="text-center">9:30</div>
+
+                            <div className="text-center">12:15</div>
+                            <div className="text-center">17:40</div>
+                            <div className="text-center">12:15</div>
+                            <div className="text-center">17:40</div>
+                            <div className="text-center">12:15</div>
+                            <div className="text-center">11:30</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* CTA Final */}
                 <div className="mt-16 text-center" data-aos="fade-up" data-aos-delay="500">
-                    <p className="text-gray-600 mb-4">Tem dúvidas ou precisa de um plano personalizado?</p>
+                    <p className="text-gray-600 mb-4">Taxa de matrícula: R$ 70 (exceto para planos avulsos)</p>
                     <Button
                         variant="outline"
                         size="lg"

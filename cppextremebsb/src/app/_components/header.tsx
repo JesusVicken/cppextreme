@@ -17,7 +17,7 @@ import { usePathname } from 'next/navigation'
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
-    const [open, setOpen] = useState(false) 
+    const [open, setOpen] = useState(false)
     const pathname = usePathname()
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default function Header() {
     }, [])
 
     useEffect(() => {
-        setOpen(false) 
+        setOpen(false)
     }, [pathname])
 
     const navItems = [
@@ -36,14 +36,15 @@ export default function Header() {
         { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },
+        { href: '/agenda', label: 'Agenda' },
         { href: '/contatos', label: 'Contato' },
     ]
 
     return (
         <header
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled
-                    ? 'bg-white/90 shadow-sm backdrop-blur-md'
-                    : 'bg-transparent'
+                ? 'bg-white/90 shadow-sm backdrop-blur-md'
+                : 'bg-transparent'
                 }`}
         >
             <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 md:py-4">
@@ -51,8 +52,8 @@ export default function Header() {
                     <Image
                         src="/logo3.png"
                         alt="Logo CPP Extreme"
-                        width={300}
-                        height={192}
+                        width={250}
+                        height={152}
                         className="object-contain h-8 md:h-auto w-auto"
                         priority
                     />
