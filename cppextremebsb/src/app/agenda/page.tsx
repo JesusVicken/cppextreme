@@ -113,10 +113,10 @@ export default function AgendaPage() {
                 className="text-center mb-12"
             >
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-                    Programação Especial
+                    Programação Especial da CPP Extreme BSB
                 </h1>
                 <p className="text-muted-foreground">
-                    Eventos marcantes e experiências únicas que a CPP proporciona para o público
+                    Quer viver experiências marcantes e únicas? A CPP Extreme BSB te leva lá. Inscreva-se no nosso próximo evento e sinta essa energia!
                 </p>
             </motion.div>
 
