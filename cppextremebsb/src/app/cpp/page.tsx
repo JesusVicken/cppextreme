@@ -1,4 +1,3 @@
-
 'use client'
 
 import { motion } from 'framer-motion'
@@ -264,7 +263,6 @@ export default function CppPage() {
                     Descubra nossas experiências exclusivas na canoa havaiana e canionismo
                 </p>
 
-                {/* Botão de Contato */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -428,109 +426,142 @@ export default function CppPage() {
                 )
             })}
 
-            {/* Seção de Canionismo */}
-            <motion.div
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                variants={container}
-                className="mt-24"
-            >
-                <motion.div variants={item} className="mb-8">
-                    <h2 className="text-2xl font-bold mb-2">{canionismo.titulo}</h2>
-                    <div className="h-1 w-20 bg-primary rounded-full mb-6"></div>
-                    <p className="text-muted-foreground max-w-3xl">
-                        Experiências verticais em cânions com equipamentos profissionais e guias especializados.
-                    </p>
-                </motion.div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Detalhes */}
-                    <motion.div variants={item}>
-                        <Card className="h-full">
-                            <CardHeader>
-                                <CardTitle>Informações</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                {canionismo.detalhes.map((detalhe, index) => (
-                                    <div key={index} className="flex items-start gap-3">
-                                        <div className="p-1 text-primary">
-                                            {detalhe.icone}
-                                        </div>
-                                        <p>{detalhe.texto}</p>
-                                    </div>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    {/* Valores */}
-                    <motion.div variants={item}>
-                        <Card className="h-full">
-                            <CardHeader>
-                                <CardTitle>Valores</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className="border-b">
-                                                <th className="text-left py-2">Tipo</th>
-                                                <th className="text-left py-2">Mobilizadores</th>
-                                                <th className="text-left py-2">Individual</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {canionismo.valores.map((valor, index) => (
-                                                <tr key={index} className="border-b">
-                                                    <td className="py-3">{valor.tipo}</td>
-                                                    <td className="py-3">{valor.mobilizadores}</td>
-                                                    <td className="py-3">{valor.individual}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-
-                    {/* Destinos */}
-                    <motion.div variants={item}>
-                        <Card className="h-full">
-                            <CardHeader>
-                                <CardTitle>Destinos Disponíveis</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-3">
-                                {canionismo.destinos.map((destino, index) => {
-                                    const nivelDestino = niveis.find(n => n.nivel === destino.nivel) || niveis[0]
-                                    return (
-                                        <div key={index} className="flex justify-between items-center">
-                                            <span>{destino.nome}</span>
-                                            <Badge className={nivelDestino.corBadge}>{destino.nivel}</Badge>
-                                        </div>
-                                    )
-                                })}
-                            </CardContent>
-                        </Card>
-                    </motion.div>
+            {/* Seção de Canionismo com Faixa de Destaque */}
+            <div className="relative mt-24">
+                {/* Faixa de Destaque */}
+                <div className="relative h-64 w-full overflow-hidden rounded-lg mb-12">
+                    <Image
+                        src="/barra.png" // Nome fictício da imagem
+                        alt="Aventuras de Canionismo"
+                        fill
+                        className="object-cover"
+                        quality={100}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-8">
+                        <div className="max-w-2xl">
+                            <motion.h2
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6 }}
+                                className="text-4xl font-bold text-white mb-4"
+                            >
+                                Aventuras Verticais
+                            </motion.h2>
+                            <motion.p
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.6, delay: 0.2 }}
+                                className="text-lg text-white/90"
+                            >
+                                Explore cânions deslumbrantes com nossa equipe especializada
+                            </motion.p>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Botão de Contato no final da página */}
+                {/* Conteúdo do Canionismo */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    initial="hidden"
+                    whileInView="show"
                     viewport={{ once: true }}
-                    className="mt-12 text-center"
+                    variants={container}
                 >
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                        <Button className="gap-2">
-                            <MessageCircle className="w-4 h-4" />
-                            Entrar em Contato via WhatsApp
-                        </Button>
-                    </a>
+                    <motion.div variants={item} className="mb-8">
+                        <h2 className="text-2xl font-bold mb-2">{canionismo.titulo}</h2>
+                        <div className="h-1 w-20 bg-primary rounded-full mb-6"></div>
+                        <p className="text-muted-foreground max-w-3xl">
+                            Experiências verticais em cânions com equipamentos profissionais e guias especializados.
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* Detalhes */}
+                        <motion.div variants={item}>
+                            <Card className="h-full">
+                                <CardHeader>
+                                    <CardTitle>Informações</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    {canionismo.detalhes.map((detalhe, index) => (
+                                        <div key={index} className="flex items-start gap-3">
+                                            <div className="p-1 text-primary">
+                                                {detalhe.icone}
+                                            </div>
+                                            <p>{detalhe.texto}</p>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        {/* Valores */}
+                        <motion.div variants={item}>
+                            <Card className="h-full">
+                                <CardHeader>
+                                    <CardTitle>Valores</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full">
+                                            <thead>
+                                                <tr className="border-b">
+                                                    <th className="text-left py-2">Tipo</th>
+                                                    <th className="text-left py-2">Mobilizadores</th>
+                                                    <th className="text-left py-2">Individual</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {canionismo.valores.map((valor, index) => (
+                                                    <tr key={index} className="border-b">
+                                                        <td className="py-3">{valor.tipo}</td>
+                                                        <td className="py-3">{valor.mobilizadores}</td>
+                                                        <td className="py-3">{valor.individual}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        {/* Destinos */}
+                        <motion.div variants={item}>
+                            <Card className="h-full">
+                                <CardHeader>
+                                    <CardTitle>Destinos Disponíveis</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-3">
+                                    {canionismo.destinos.map((destino, index) => {
+                                        const nivelDestino = niveis.find(n => n.nivel === destino.nivel) || niveis[0]
+                                        return (
+                                            <div key={index} className="flex justify-between items-center">
+                                                <span>{destino.nome}</span>
+                                                <Badge className={nivelDestino.corBadge}>{destino.nivel}</Badge>
+                                            </div>
+                                        )
+                                    })}
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+                    </div>
+
+                    {/* Botão de Contato no final da página */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="mt-12 text-center"
+                    >
+                        <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                            <Button className="gap-2">
+                                <MessageCircle className="w-4 h-4" />
+                                Entrar em Contato via WhatsApp
+                            </Button>
+                        </a>
+                    </motion.div>
                 </motion.div>
-            </motion.div>
+            </div>
         </div>
     )
 }
