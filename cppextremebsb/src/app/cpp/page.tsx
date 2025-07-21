@@ -1,10 +1,11 @@
+
 'use client'
 
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ChevronRight, Moon, Sun, Sunrise, Activity, Users, Calendar, Clock, AlertCircle, Info } from 'lucide-react'
+import { ChevronRight, Moon, Sun, Sunrise, Activity, Users, Calendar, Clock, AlertCircle, Info, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
@@ -243,6 +244,10 @@ const hoverCard = {
 }
 
 export default function CppPage() {
+    const whatsappNumber = '61998219177'
+    const whatsappMessage = 'Olá! Gostaria de saber mais sobre as modalidades da CPP Extreme.'
+    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
+
     return (
         <div className="container mx-auto px-4 py-20 md:py-16 lg:py-20">
             {/* Cabeçalho */}
@@ -258,6 +263,21 @@ export default function CppPage() {
                 <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
                     Descubra nossas experiências exclusivas na canoa havaiana e canionismo
                 </p>
+
+                {/* Botão de Contato */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="mt-6"
+                >
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                        <Button className="gap-2">
+                            <MessageCircle className="w-4 h-4" />
+                            Entrar em Contato
+                        </Button>
+                    </a>
+                </motion.div>
             </motion.div>
 
             {/* Seção de Níveis */}
@@ -495,6 +515,21 @@ export default function CppPage() {
                         </Card>
                     </motion.div>
                 </div>
+
+                {/* Botão de Contato no final da página */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    className="mt-12 text-center"
+                >
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                        <Button className="gap-2">
+                            <MessageCircle className="w-4 h-4" />
+                            Entrar em Contato via WhatsApp
+                        </Button>
+                    </a>
+                </motion.div>
             </motion.div>
         </div>
     )
