@@ -31,8 +31,8 @@ export default function Header() {
     }, [pathname])
 
     const navItems = [
-        { href: '/', label: 'Home' },
-        { href: '/cpp', label: 'CPP Extreme Brasília' },
+        // { href: '/', label: 'Home' },
+        { href: '/cpp', label: 'CPP Extreme' },
         { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },

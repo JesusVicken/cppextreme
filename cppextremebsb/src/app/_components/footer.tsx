@@ -1,35 +1,33 @@
-import Image from 'next/image'
+import Image from "next/image"
 import {
   FacebookLogo,
   InstagramLogo,
   YoutubeLogo,
   WhatsappLogo,
-} from '@phosphor-icons/react/dist/ssr'
-import { Anchor } from 'lucide-react'
+} from "@phosphor-icons/react/dist/ssr"
+import { Anchor } from "lucide-react"
 
-import ondasupLogo from '../../../public/ondasup.jpg'
-import ascadeLogo from '../../../public/logo-ascade.png'
-import filhooosLogo from '../../../public/filhooos.jpg' // Nova imagem
-import canoMAMALogo from '../../../public/canoMAMAlogo.png' // Nova imagem
+import ondasupLogo from "../../../public/ondasup.jpg"
+import ascadeLogo from "../../../public/logo-ascade.png"
+import filhooosLogo from "../../../public/filhooos.jpg"
+import canoMAMALogo from "../../../public/canoMAMAlogo.png"
 
 const brands = [
-  { name: 'Ondasup', logo: ondasupLogo },
-  { name: 'Ascade', logo: ascadeLogo },
-  { name: 'Filhooos', logo: filhooosLogo }, // Novo parceiro
-  { name: 'CanoMAMA', logo: canoMAMALogo }, // Novo parceiro
+  { name: "Ondasup", logo: ondasupLogo },
+  { name: "Ascade", logo: ascadeLogo },
+  { name: "Filhooos", logo: filhooosLogo },
+  { name: "CanoMAMA", logo: canoMAMALogo },
 ]
 
 export function Footer() {
-  const whatsappNumber = '61998219177'
+  const whatsappNumber = "61998219177"
   const whatsappMessage =
-    'Olá, gostaria de mais informações sobre as aulas de remo na CPP Extreme!'
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    whatsappMessage
-  )}`
+    "Olá, gostaria de mais informações sobre as aulas de remo na CPP Extreme!"
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
 
   return (
     <section className="bg-black text-white">
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 space-y-16">
         {/* Parceiros */}
         <div
           className="border-b border-white/20 pb-8"
@@ -37,7 +35,6 @@ export function Footer() {
           data-aos-duration="3000"
         >
           <h4 className="text-4xl font-semibold mb-12 text-center flex items-center justify-center gap-3">
-            <Anchor className="w-8 h-8" />
             Nossos Parceiros
           </h4>
 
@@ -45,7 +42,7 @@ export function Footer() {
             {brands.map((item, index) => (
               <div
                 key={index}
-                className="bg-white p-4 rounded-lg flex items-center justify-center"
+                className="bg-white p-4 rounded-lg flex items-center justify-center shadow-md"
               >
                 <Image
                   src={item.logo}
@@ -55,10 +52,10 @@ export function Footer() {
                   quality={100}
                   className="object-contain"
                   style={{
-                    width: 'auto',
-                    height: 'auto',
-                    maxWidth: '150px',
-                    maxHeight: '80px',
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "150px",
+                    maxHeight: "80px",
                   }}
                 />
               </div>
@@ -66,19 +63,21 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Informações e Contatos */}
-        <footer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 mt-5">
+        {/* Informações */}
+        <footer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {/* Sobre */}
-          <div data-aos="fade-up-left">
-            <h3 className="text-2xl font-semibold mb-2">CPP Extreme Brasília</h3>
-            <p className="mb-4">
-              Promovendo inclusão social através do esporte e aventura.
+          <div data-aos="fade-up-left" className="space-y-4">
+            <h3 className="text-2xl font-semibold">CPP Extreme Brasília</h3>
+            <p className="text-gray-300 leading-relaxed">
+              Passeios de Canoa e aventuras em cânions e vivências que despertam o corpo e acalmam a mente.
+              Experiências de reconexão com a natureza e com você mesmo(a).
             </p>
             <a
               href={whatsappLink}
-              className="bg-green-500 px-5 py-2 rounded-md font-semibold flex items-center justify-center w-fit gap-2"
               target="_blank"
               rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-green-500 text-white px-5 py-2 rounded-md font-semibold hover:bg-green-600 transition mx-auto md:mx-0"
+              aria-label="Contato via WhatsApp"
             >
               <WhatsappLogo className="w-5 h-5" />
               Contato via WhatsApp
@@ -86,21 +85,26 @@ export function Footer() {
           </div>
 
           {/* Contatos */}
-          <div data-aos="flip-up">
-            <h3 className="text-2xl font-semibold mb-2">Contatos</h3>
+          <div data-aos="flip-up" className="space-y-4">
+            <h3 className="text-2xl font-semibold">Contatos</h3>
             {/* <p>Email: contato@cppextreme.com.br</p> */}
-            <p>Telefone: (61) 99821-9177</p>
-            <p>Ascade - Associação dos Servidores da Câmara dos Deputados 📍 Brasília DF</p>
+            <p className="text-gray-300">Telefone: (61) 99821-9177</p>
+            <p className="text-gray-300">
+              Ascade - Associação dos Servidores da Câmara dos Deputados 📍
+              Brasília - DF
+            </p>
           </div>
 
           {/* Redes Sociais */}
-          <div data-aos="fade-up-right">
-            <h3 className="text-2xl font-semibold mb-2">Redes Sociais</h3>
-            <div className="flex gap-4">
+          <div data-aos="fade-up-right" className="space-y-4">
+            <h3 className="text-2xl font-semibold">Redes Sociais</h3>
+            <div className="flex gap-5 justify-center md:justify-start">
               <a
                 href="https://www.facebook.com/CPPExtreme"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="text-blue-600 hover:scale-110 transition-transform"
               >
                 <FacebookLogo className="w-8 h-8" />
               </a>
@@ -108,6 +112,8 @@ export function Footer() {
                 href="https://www.instagram.com/cppextremebsb/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-pink-500 hover:scale-110 transition-transform"
               >
                 <InstagramLogo className="w-8 h-8" />
               </a>
@@ -115,6 +121,8 @@ export function Footer() {
                 href="https://www.youtube.com/@cppextreme"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="text-red-600 hover:scale-110 transition-transform"
               >
                 <YoutubeLogo className="w-8 h-8" />
               </a>
@@ -123,7 +131,7 @@ export function Footer() {
         </footer>
       </div>
 
-      {/* Google Maps com marcação da Ascade */}
+      {/* Google Maps */}
       <div className="w-full h-[300px] md:h-[400px] lg:h-[450px]">
         <iframe
           title="Localização CPP Extreme na Ascade"

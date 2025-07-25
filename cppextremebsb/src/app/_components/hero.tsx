@@ -1,6 +1,6 @@
 import { WhatsappLogo } from '@phosphor-icons/react/dist/ssr'
 import { Check } from "lucide-react"
-import cpp1 from "../../../public/canoa1.jpg"
+import cpp1 from "../../../public/canoa5.jpg"
 import Image from "next/image"
 
 export function Hero() {
@@ -42,15 +42,23 @@ export function Hero() {
                                 <ul className="text-sm md:text-base space-y-2">
                                     <li className="flex items-center gap-2">
                                         <Check className="text-green-600" />
-                                        Remadas de canoa Polinésia (Havaiana)
-                                    </li>
-                                    <li className="flex items-center gap-2">
-                                        <Check className="text-green-600" />
-                                        Desafios e Aventuras Extreme
-                                    </li>
-                                    <li className="flex items-center gap-2">
-                                        <Check className="text-green-600" />
                                         Experiências de Saúde e bem-estar
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <Check className="text-green-600" />
+                                        Remadas no nascer do sol, pôr do sol e lua cheia
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <Check className="text-green-600" />
+                                        Desafios e Aventuras Extreme Cânions
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <Check className="text-green-600" />
+                                        Piqueniques ao ar livre
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <Check className="text-green-600" />
+                                        Yoga, Sound healing e outras práticas integrativas
                                     </li>
                                 </ul>
                             </div>
@@ -100,13 +108,6 @@ export function Hero() {
                                 <WhatsappLogo className='w-5 h-5' />
                                 Contato via WhatsApp
                             </a>
-                        </div>
-
-                        {/* Aula experimental */}
-                        <div className="mt-4">
-                            <p className="text-sm">
-                                Venha fazer sua aula experimental <b className="bg-white text-black px-2 py-1 rounded-md">gratuita</b>
-                            </p>
                         </div>
                     </div>
 
