@@ -10,6 +10,7 @@ import {
 import { useEffect } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import Image from 'next/image'
 
 export default function MobilizadoresPage() {
     useEffect(() => {
@@ -96,6 +97,32 @@ export default function MobilizadoresPage() {
                         </p>
                     </div>
 
+                    {/* Imagem de destaque mobilizadores - estilo canyoning */}
+                    <div
+                        className="flex justify-center mb-20"
+                        data-aos="fade-up"
+                        data-aos-delay="300"
+                    >
+                        <Card className="w-full max-w-[900px] shadow-lg transition-transform hover:scale-105">
+                            <CardHeader className="p-0 h-[300px] md:h-[400px] overflow-hidden relative rounded-t-2xl">
+                                <Image
+                                    src="/mobilizadores.jpg"
+                                    alt="Mobilizadores CPP Extreme"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </CardHeader>
+                            <CardContent className="p-6 text-center">
+                                <CardTitle className="text-2xl font-bold mb-2">Mobilizadores em Ação</CardTitle>
+                                <p className="text-gray-700 text-base max-w-2xl mx-auto">
+                                    Uma rede de pessoas que vivem e compartilham a cultura da canoa havaiana, conectando comunidades e transformando vidas através da natureza.
+                                </p>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+
                     {/* Por que ser um mobilizador */}
                     <div className="mb-20" data-aos="fade-up">
                         <div className="bg-black/5 p-8 rounded-2xl border border-black/10">
@@ -109,18 +136,19 @@ export default function MobilizadoresPage() {
                                     </p>
                                     <ul className="space-y-3">
                                         <li className="flex items-start gap-2">
-                                            <ChevronRight className="text-black/50 mt-1 flex-shrink-0" />
+                                            <ChevronRight className="text-green-600 mt-1 flex-shrink-0" />
                                             <span><strong>Monetize sua rede</strong>: Ganhe comissões por cada grupo que levar para as experiências</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <ChevronRight className="text-black/50 mt-1 flex-shrink-0" />
+                                            <ChevronRight className="text-green-600 mt-1 flex-shrink-0" />
                                             <span><strong>Destaque-se</strong>: Seja reconhecido como líder comunitário no ecossistema de canoa havaiana</span>
                                         </li>
                                         <li className="flex items-start gap-2">
-                                            <ChevronRight className="text-black/50 mt-1 flex-shrink-0" />
+                                            <ChevronRight className="text-green-600 mt-1 flex-shrink-0" />
                                             <span><strong>Cresça profissionalmente</strong>: Desenvolva habilidades de gestão de grupos e eventos</span>
                                         </li>
                                     </ul>
+
                                 </div>
                                 <div className="bg-black/10 p-6 rounded-lg">
                                     <h4 className="font-bold mb-3 flex items-center gap-2">
@@ -169,7 +197,7 @@ export default function MobilizadoresPage() {
                             {benefits.map((benefit, index) => (
                                 <div key={index} className="flex items-start gap-3 bg-white border border-black/10 p-4 rounded-lg">
                                     <div className="bg-black/10 p-2 rounded-full">
-                                        <CheckIcon className="w-4 h-4 text-black/70" />
+                                        <CheckIcon className="w-4 h-4 text-green-600" />
                                     </div>
                                     <span className="text-gray-800">{benefit}</span>
                                 </div>
