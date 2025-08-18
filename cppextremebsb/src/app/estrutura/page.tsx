@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import {
     Card,
     CardContent,
@@ -13,7 +14,7 @@ import {
     ShowerHead,
     Lock,
     MapPin,
-    Users,
+    Utensils,
     Ship,
     AlarmClock,
     Handshake,
@@ -34,56 +35,57 @@ const cardColors = [
     'bg-orange-50',
 ]
 
+// Array completo com todos os dados da estrutura
 const estruturaData = [
     {
-        icon: <MapPin className="w-6 h-6 text-blue-600" />,
+        icon: <MapPin className="h-6 w-6 text-blue-600" />,
         title: 'Localização',
         description:
             'Base localizada no Clube ASCADE, com acesso fácil, seguro e de frente para o lago.',
     },
     {
-        icon: <ParkingCircle className="w-6 h-6 text-green-600" />,
+        icon: <ParkingCircle className="h-6 w-6 text-green-600" />,
         title: 'Estacionamento',
         description:
             'Estacionamento interno e seguro disponível dentro do clube para sua tranquilidade.',
     },
     {
-        icon: <ShowerHead className="w-6 h-6 text-indigo-600" />,
+        icon: <ShowerHead className="h-6 w-6 text-indigo-600" />,
         title: 'Vestiários com chuveiros',
         description:
             'Vestiários completos com chuveiros para você se refrescar após a remada.',
     },
     {
-        icon: <Lock className="w-6 h-6 text-yellow-600" />,
+        icon: <Lock className="h-6 w-6 text-yellow-600" />,
         title: 'Guarda-volumes',
         description: 'Sala dedicada para deixar seus pertences com segurança.',
     },
     {
-        icon: <Users className="w-6 h-6 text-pink-600" />,
-        title: 'Ambiente acolhedor',
+        icon: <Utensils className="h-6 w-6 text-pink-600" />,
+        title: 'Restaurante e Lanchonete',
         description:
-            'Nosso time está sempre disponível para receber bem quem chega pra remar!',
+            'Após suas remadas, recarregue as energias no nosso restaurante! Almoço caseiro e café reforçado para você continuar o dia com disposição',
     },
     {
-        icon: <Ship className="w-6 h-6 text-cyan-600" />,
+        icon: <Ship className="h-6 w-6 text-cyan-600" />,
         title: 'Equipamentos modernos',
         description:
             'Canoas, remos e coletes de alta qualidade para sua segurança e performance.',
     },
     {
-        icon: <AlarmClock className="w-6 h-6 text-rose-600" />,
+        icon: <AlarmClock className="h-6 w-6 text-rose-600" />,
         title: 'Flexibilidade de horários',
         description:
             'Aulas em diferentes horários para encaixar sua remada na rotina.',
     },
     {
-        icon: <Handshake className="w-6 h-6 text-violet-600" />,
+        icon: <Handshake className="h-6 w-6 text-violet-600" />,
         title: 'Integração com a natureza',
         description:
             'Contato direto com o lago Paranoá, proporcionando conexão com o esporte e o ambiente.',
     },
     {
-        icon: <GraduationCap className="w-6 h-6 text-orange-600" />,
+        icon: <GraduationCap className="h-6 w-6 text-orange-600" />,
         title: 'Professores capacitados',
         description:
             'Professores prontos para guiar sua experiência de forma segura e empolgante.',
@@ -92,34 +94,93 @@ const estruturaData = [
 
 export default function EstruturaClubeCompleta() {
     return (
-        <section className="bg-white py-32 px-4 md:px-8">
-            <div className="max-w-6xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-12"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold text-zinc-800">
-                        Nossa Estrutura
-                    </h2>
-                    <p className="text-zinc-600 mt-2 max-w-xl mx-auto">
-                        Tudo pensado para sua experiência de remada ser confortável, segura e inesquecível.
-                    </p>
-                    <Badge className="mt-4 text-sm px-4 py-1 bg-zinc-100 text-zinc-700 border border-zinc-200">
-                        Clube ASCADE · Lago Paranoá
-                    </Badge>
-                </motion.div>
+        <section className="bg-white py-16 md:py-24">
+            <div className="mx-auto max-w-6xl space-y-16 px-4 md:px-8">
+                {/* Agrupador da Faixa de Destaque e do texto mobile */}
+                <div>
+                    {/* Faixa de Destaque com Imagem */}
+                    <div className="relative h-60 w-full overflow-hidden rounded-2xl md:h-72">
+                        <Image
+                            src="/ascade.jpg"
+                            alt="Clube ASCADE - Local das aulas de canoa havaiana"
+                            fill
+                            className="object-cover"
+                            quality={80}
+                            priority
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* TEXTO PARA DESKTOP (dentro da imagem) */}
+                        <div className="hidden md:flex absolute inset-0 items-center bg-gradient-to-r from-black/70 via-black/50 to-transparent p-8 md:p-12">
+                            <div className="max-w-xl">
+                                <motion.h2
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.6 }}
+                                    viewport={{ once: true }}
+                                    className="mb-4 text-4xl font-bold leading-tight text-white md:text-5xl"
+                                >
+                                    Nossa Estrutura
+                                </motion.h2>
+                                <motion.p
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.6, delay: 0.2 }}
+                                    viewport={{ once: true }}
+                                    className="text-lg text-white/90"
+                                >
+                                    Tudo pensado para sua experiência de remada
+                                    ser confortável, segura e inesquecível.
+                                </motion.p>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.4 }}
+                                    viewport={{ once: true }}
+                                >
+                                    <Badge className="mt-6 border-none bg-white/90 px-4 py-1 text-sm text-zinc-800 shadow">
+                                        Clube ASCADE · Lago Paranoá
+                                    </Badge>
+                                </motion.div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* NOVO: TEXTO PARA MOBILE (abaixo da imagem) */}
+                    <div className="mt-8 text-center md:hidden">
+                        <h2 className="text-3xl font-bold text-zinc-800">
+                            Nossa Estrutura
+                        </h2>
+                        <p className="mx-auto mt-2 max-w-xl text-zinc-600">
+                            Tudo pensado para sua experiência de remada ser
+                            confortável, segura e inesquecível.
+                        </p>
+                        <Badge className="mt-4 border border-zinc-200 bg-zinc-100 px-4 py-1 text-sm text-zinc-700">
+                            Clube ASCADE · Lago Paranoá
+                        </Badge>
+                    </div>
+                </div>
+
+                {/* Grid de Cards com a Estrutura */}
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {estruturaData.map((item, index) => (
                         <motion.div
                             key={index}
-                            className={`rounded-2xl ${cardColors[index % cardColors.length]}`}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{
+                                delay: index * 0.05,
+                                duration: 0.5,
+                                type: 'spring',
+                                stiffness: 250,
+                                damping: 20,
+                            }}
+                            className={`rounded-2xl ${cardColors[index % cardColors.length]
+                                }`}
                             whileHover={{ scale: 1.05, rotate: 0.3 }}
-                            transition={{ type: 'spring', stiffness: 250, damping: 20 }}
                         >
-                            <Card className="h-full border-none shadow-md bg-transparent">
+                            <Card className="h-full border-none bg-transparent shadow-md">
                                 <CardHeader className="flex flex-row items-start gap-4">
                                     <div className="mt-1">{item.icon}</div>
                                     <div>
@@ -136,7 +197,44 @@ export default function EstruturaClubeCompleta() {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Mapa - Localização do Clube */}
+                <div className="w-full rounded-2xl bg-zinc-50 p-8 md:p-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="mb-8 text-center"
+                    >
+                        <h3 className="text-2xl font-bold text-zinc-800 md:text-3xl">
+                            Venha fazer sua aula experimental!
+                        </h3>
+                        <p className="mx-auto mt-2 max-w-xl text-zinc-600">
+                            Estamos no Clube ASCADE, às margens do Lago Paranoá
+                        </p>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        viewport={{ once: true }}
+                        className="h-[300px] w-full overflow-hidden rounded-xl shadow-lg md:h-[400px] lg:h-[450px]"
+                    >
+                        <iframe
+                            title="Localização CPP Extreme na Ascade"
+                            src="https://www.google.com/maps?q=Ascade+-+Associação+dos+Servidores+da+Câmara+dos+Deputados,+Brasília+-+DF&output=embed"
+                            width="100%"
+                            height="100%"
+                            loading="lazy"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </motion.div>
+                </div>
             </div>
         </section>
-    )
+    );
 }
