@@ -32,7 +32,7 @@ export default function Header() {
 
     const navItems = [
         // { href: '/', label: 'Home' },
-        { href: '/cpp', label: 'CPP Extreme' },
+        { href: '/cpp', label: 'Experiências' },
         { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },
