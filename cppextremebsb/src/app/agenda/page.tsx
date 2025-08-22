@@ -90,20 +90,20 @@ export default function AgendaCompleta() {
                     src="/lualua.jpg"
                     alt="Destaque Lua Cheia"
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-center "
                     quality={100}
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-10">
                     <div className="max-w-2xl">
-                        <motion.h2
+                        {/* <motion.h2
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6 }}
                             className="hidden sm:block text-3xl sm:text-4xl font-bold text-white mb-4"
                         >
                             Confira nossa Agenda
-                        </motion.h2>
+                        </motion.h2> */}
                         <motion.p
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
