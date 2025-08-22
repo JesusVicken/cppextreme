@@ -147,7 +147,7 @@ export default function CppPage() {
             {/* Imagem de destaque */}
             <div className="relative h-72 md:h-96 w-full mb-16 rounded-lg overflow-hidden" data-aos="fade-up">
                 <Image
-                    src="/porsol.jpeg"
+                    src="/experimental.jpg"
                     alt="Experiências CPP Extreme"
                     fill
                     className="object-cover"
