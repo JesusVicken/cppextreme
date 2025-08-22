@@ -7,7 +7,7 @@ import "./globals.css"
 import { AosInit } from "./_components/aos-init"
 import { ParallaxWrapper } from "./_components/ParallaxWrapper"
 import Header from "./_components/header"
-
+import FooterDev from "./_components/footer-dev"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +57,7 @@ export default function RootLayout({
           {children}
           <AosInit />
         </ParallaxWrapper>
+        <FooterDev />
       </body>
     </html>
   )

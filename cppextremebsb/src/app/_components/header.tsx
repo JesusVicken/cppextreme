@@ -1,3 +1,7 @@
+
+
+
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -31,8 +35,8 @@ export default function Header() {
     }, [pathname])
 
     const navItems = [
-        // { href: '/', label: 'Home' },
-        { href: '/cpp', label: 'Experiências' },
+        { href: '/cpp', label: 'Passeios' },
+        { href: '/extreme', label: 'Extreme' },
         { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/mobilizadores', label: 'Mobilizadores' },
         { href: '/planos', label: 'Planos' },
@@ -60,12 +64,19 @@ export default function Header() {
                 </Link>
 
                 {/* Menu Desktop */}
-                <nav className="hidden md:flex items-center gap-4 lg:gap-6 font-heading text-sm lg:text-base font-medium tracking-wide uppercase">
+                <nav
+                    className="
+                        hidden md:flex items-center
+                        gap-3 md:gap-3 lg:gap-6
+                        font-heading font-medium tracking-wide uppercase
+                        text-xs md:text-sm lg:text-base
+                    "
+                >
                     {navItems.map(({ href, label }) => (
                         <Link
                             key={href}
                             href={href}
-                            className="px-2 py-1 rounded-md hover:text-primary transition-colors hover:bg-accent/10"
+                            className="px-1.5 md:px-2 py-1 rounded-md hover:text-primary transition-colors hover:bg-accent/10 whitespace-nowrap"
                         >
                             {label}
                         </Link>

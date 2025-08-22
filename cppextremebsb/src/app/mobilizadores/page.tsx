@@ -93,7 +93,7 @@ export default function MobilizadoresPage() {
                             data-aos="fade-up"
                             data-aos-delay="200"
                         >
-                            Transforme sua paixão por canoa havaiana em experiências inesquecíveis e gere renda ajudando outros a descobrirem esse esporte incrível.
+                            Transforme sua paixão por esportes em experiências inesquecíveis com a Canoa Havaiana e gere renda ajudando outros a descobrirem esse esporte incrível.
                         </p>
                     </div>
 

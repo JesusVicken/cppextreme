@@ -1,3 +1,5 @@
+
+
 'use client'
 
 import Image from 'next/image'
@@ -98,8 +100,8 @@ export default function EstruturaClubeCompleta() {
             <div className="mx-auto max-w-6xl space-y-16 px-4 md:px-8">
                 {/* Agrupador da Faixa de Destaque e do texto mobile */}
                 <div>
-                    {/* Faixa de Destaque com Imagem */}
-                    <div className="relative h-60 w-full overflow-hidden rounded-2xl md:h-72">
+                    {/* Faixa de Destaque com Imagem - AJUSTADA para desktop */}
+                    <div className="relative h-72 w-full mb-16 rounded-lg overflow-hidden md:h-96" data-aos="fade-up">
                         <Image
                             src="/ascade.jpg"
                             alt="Clube ASCADE - Local das aulas de canoa havaiana"
@@ -146,7 +148,7 @@ export default function EstruturaClubeCompleta() {
                         </div>
                     </div>
 
-                    {/* NOVO: TEXTO PARA MOBILE (abaixo da imagem) */}
+                    {/* TEXTO PARA MOBILE (abaixo da imagem) */}
                     <div className="mt-8 text-center md:hidden">
                         <h2 className="text-3xl font-bold text-zinc-800">
                             Nossa Estrutura

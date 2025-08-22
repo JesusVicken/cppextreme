@@ -90,7 +90,7 @@ export default function AgendaCompleta() {
                     src="/lualua.jpg"
                     alt="Destaque Lua Cheia"
                     fill
-                    className="object-cover object-center "
+                    className="object-cover object-center"
                     quality={100}
                 />
 
