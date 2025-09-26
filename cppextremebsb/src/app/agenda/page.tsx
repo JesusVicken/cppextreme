@@ -1,13 +1,20 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Calendar as CalendarIcon, Clock, ChevronRight } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
+import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Calendar as CalendarIcon, Clock, ChevronRight, X } from 'lucide-react'
+import * as Dialog from '@radix-ui/react-dialog'
 
-// Dados atualizados da agenda
+// Dados da agenda
 const eventosPorMes = [
     {
         mes: 'Outubro 2025 - 3ª EDIÇÃO LUAU FLUIR',
@@ -55,39 +62,10 @@ Uma prática para despertar o corpo, abrir o coração e se entregar às vibraç
                 descricao: 'Última oportunidade para ver a lua cheia nascendo às 20:05 no Lago Paranoá.'
             }
         ]
-    },
-    {
-        mes: 'Agosto 2025 - Experiências e Passeios',
-        eventos: [
-            {
-                data: '01, 15, 22/08',
-                horario: '17:40',
-                atividade: 'Pôr do Sol (Sextas)',
-                badge: 'Recorrente',
-                imagem: '/regular.jpg',
-                descricao: 'Nossas tradicionais remadas de sexta-feira no pôr do sol.'
-            },
-            {
-                data: '02, 16, 23/08',
-                horario: '09:30',
-                atividade: 'Remadas Matinais (Sábados)',
-                badge: 'Recorrente',
-                imagem: '/cpp-sol.jpg',
-                descricao: 'Comece o final de semana com energia remando ao nascer do sol.'
-            },
-            {
-                data: '08-11/08',
-                horario: 'Variados',
-                atividade: 'Lua Cheia + Dia dos Pais',
-                badge: 'Combo',
-                imagem: '/noite.jpg',
-                descricao: 'Pacote especial para pais e filhos aproveitarem a lua cheia juntos.'
-            }
-        ]
     }
 ]
 
-// Função para redirecionar para o WhatsApp
+// Função para redirecionar para WhatsApp
 const redirectToWhatsApp = (evento: { atividade: string; data: string; horario: string }) => {
     const phoneNumber = '556198219177'
     const message = `Olá! Gostaria de mais informações sobre: ${evento.atividade} (${evento.data} às ${evento.horario}). Como posso participar?`
@@ -97,9 +75,11 @@ const redirectToWhatsApp = (evento: { atividade: string; data: string; horario: 
 }
 
 export default function AgendaCompleta() {
+    const [selectedEvento, setSelectedEvento] = useState<any>(null)
+
     return (
         <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
-            {/* Faixa de Destaque com Vídeo */}
+            {/* Faixa de Destaque */}
             <div className="relative h-64 md:h-96 w-full overflow-hidden rounded-lg mb-12">
                 <video
                     src="/lua.mp4"
@@ -110,21 +90,19 @@ export default function AgendaCompleta() {
                     className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-10">
-                    <div className="max-w-2xl">
-                        <motion.p
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="text-lg text-white/90 absolute left-4 bottom-8 md:left-12 md:bottom-16 max-w-md"
-                        >
-                            Viva experiências únicas no Lago Paranoá
-                        </motion.p>
-                    </div>
+                    <motion.p
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-lg text-white/90 absolute left-4 bottom-8 md:left-12 md:bottom-16 max-w-md"
+                    >
+                        Viva experiências únicas no Lago Paranoá
+                    </motion.p>
                 </div>
             </div>
 
             {/* Cabeçalho */}
-            <div data-aos="fade-down" className="text-center mb-12">
+            <div className="text-center mb-12">
                 <h1 className="py-10 text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-primary to-black bg-clip-text text-transparent">
                     Confira nossa programação Especial da CPP EXTREME BSB
                 </h1>
@@ -135,8 +113,7 @@ export default function AgendaCompleta() {
 
             {/* Agenda por mês */}
             {eventosPorMes.map((mes, index) => (
-                <div key={index} data-aos="fade-up" className="mb-16">
-                    {/* Título do mês */}
+                <div key={index} className="mb-16">
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
                         <CalendarIcon className="h-6 w-6 text-primary" />
                         <span className="bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-gray-100 dark:to-gray-300">
@@ -144,88 +121,113 @@ export default function AgendaCompleta() {
                         </span>
                     </h2>
 
-                    {/* Grid de eventos */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {mes.eventos.map((evento, eventIndex) => {
                             const isEspecial = evento.badge === 'Especial'
                             return (
-                                <div
+                                <Card
                                     key={`${index}-${eventIndex}`}
-                                    data-aos="zoom-in"
-                                    data-aos-delay={eventIndex * 100}
+                                    className={`h-full border-border hover:border-primary/40 transition-all flex flex-col group overflow-hidden rounded-2xl shadow-md hover:shadow-xl ${isEspecial ? 'ring-2 ring-primary/40' : ''}`}
+                                    onClick={() => setSelectedEvento(evento)}
                                 >
-                                    <Card className={`h-full border-border hover:border-primary/40 transition-all flex flex-col group overflow-hidden rounded-2xl shadow-md hover:shadow-xl ${isEspecial ? 'ring-2 ring-primary/40' : ''}`}>
-                                        {/* Imagem com overlay e badge */}
-                                        <div
-                                            className={`relative w-full overflow-hidden 
-                                            ${isEspecial ? 'h-48 sm:h-52 md:h-60 lg:h-72' : 'h-40 sm:h-52 md:h-60 lg:h-72'}
-                                        `}
+                                    <div
+                                        className={`relative w-full overflow-hidden 
+                                        ${isEspecial ? 'h-48 sm:h-52 md:h-60 lg:h-72' : 'h-40 sm:h-52 md:h-60 lg:h-72'}
+                                    `}
+                                    >
+                                        <Image
+                                            src={evento.imagem}
+                                            alt={evento.atividade}
+                                            fill
+                                            className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        />
+                                        {isEspecial && (
+                                            <div className="absolute inset-0 bg-white/20 backdrop-blur-lg rounded-2xl pointer-events-none mix-blend-overlay animate-pulse"></div>
+                                        )}
+
+                                        <Badge
+                                            variant="outline"
+                                            className="absolute top-3 right-3 backdrop-blur-sm bg-white/30 dark:bg-black/30 border-white/30 text-white dark:text-gray-100"
                                         >
-                                            <Image
-                                                src={evento.imagem}
-                                                alt={evento.atividade}
-                                                fill
-                                                className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
+                                            {evento.badge}
+                                        </Badge>
+                                    </div>
 
-                                            {/* Overlay Liquid Glass para evento especial */}
-                                            {isEspecial && (
-                                                <div className="absolute inset-0 bg-white/20 backdrop-blur-lg rounded-2xl pointer-events-none mix-blend-overlay animate-pulse"></div>
-                                            )}
+                                    <CardHeader className="pb-2">
+                                        <CardTitle className={`text-lg sm:text-xl group-hover:text-primary transition-colors duration-300 ${isEspecial ? 'text-primary' : ''}`}>
+                                            {evento.atividade}
+                                        </CardTitle>
+                                    </CardHeader>
 
-                                            <Badge
-                                                variant="outline"
-                                                className="absolute top-3 right-3 backdrop-blur-sm bg-white/30 dark:bg-black/30 border-white/30 text-white dark:text-gray-100"
-                                            >
-                                                {evento.badge}
-                                            </Badge>
-                                        </div>
-
-                                        {/* Conteúdo do card */}
-                                        <CardHeader className="pb-2">
-                                            <CardTitle className={`text-lg sm:text-xl group-hover:text-primary transition-colors duration-300 ${isEspecial ? 'text-primary' : ''}`}>
-                                                {evento.atividade}
-                                            </CardTitle>
-                                            <p className="text-sm sm:text-base text-muted-foreground line-clamp-4">
-                                                {evento.descricao}
-                                            </p>
-                                        </CardHeader>
-
-                                        <CardContent className="flex-1 pt-0">
-                                            <div className="flex flex-wrap gap-4 text-sm">
-                                                <div className="flex items-center gap-2">
-                                                    <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                                                    <span>{evento.data}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Clock className="h-4 w-4 text-muted-foreground" />
-                                                    <span>{evento.horario}</span>
-                                                </div>
+                                    <CardContent className="flex-1 pt-0">
+                                        <div className="flex flex-wrap gap-4 text-sm">
+                                            <div className="flex items-center gap-2">
+                                                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                                <span>{evento.data}</span>
                                             </div>
-                                        </CardContent>
-
-                                        <CardContent>
-                                            <Button
-                                                onClick={() => redirectToWhatsApp(evento)}
-                                                variant="outline"
-                                                className="w-full group-hover:border-primary group-hover:text-primary group-hover:bg-primary/10 transition-all duration-300"
-                                                size="sm"
-                                            >
-                                                <span>Quero marcar minha remada!</span>
-                                                <ChevronRight className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-1 transition-all" />
-                                            </Button>
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="h-4 w-4 text-muted-foreground" />
+                                                <span>{evento.horario}</span>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             )
                         })}
                     </div>
                 </div>
             ))}
 
+            {/* Modal de detalhes do evento */}
+            <Dialog.Root open={!!selectedEvento} onOpenChange={(open) => !open && setSelectedEvento(null)}>
+                <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 max-w-lg w-[90%] md:w-2/3 bg-white dark:bg-gray-900 rounded-2xl shadow-xl -translate-x-1/2 -translate-y-1/2 p-6 z-50 overflow-y-auto max-h-[90vh]">
+                        <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-xl font-bold">{selectedEvento?.atividade}</h3>
+                            <Dialog.Close asChild>
+                                <Button variant="ghost" className="p-1">
+                                    <X className="h-5 w-5" />
+                                </Button>
+                            </Dialog.Close>
+                        </div>
+                        <div className="w-full mb-4 flex justify-center">
+                            {selectedEvento && (
+                                <Image
+                                    src={selectedEvento.imagem}
+                                    alt={selectedEvento.atividade}
+                                    width={600}  // largura máxima que se adapta bem
+                                    height={400} // altura proporcional
+                                    className="object-contain rounded-xl"
+                                />
+                            )}
+                        </div>
+                        <div className="flex flex-wrap gap-4 mb-4 text-sm">
+                            <div className="flex items-center gap-2">
+                                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                <span>{selectedEvento?.data}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-muted-foreground" />
+                                <span>{selectedEvento?.horario}</span>
+                            </div>
+                        </div>
+                        <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-line mb-6">
+                            {selectedEvento?.descricao}
+                        </p>
+                        <Button
+                            onClick={() => selectedEvento && redirectToWhatsApp(selectedEvento)}
+                            className="w-full"
+                        >
+                            Quero marcar minha remada!
+                        </Button>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog.Root>
+
             {/* Rodapé */}
-            <div data-aos="fade-in" className="text-center mt-12 text-sm text-muted-foreground italic">
+            <div className="text-center mt-12 text-sm text-muted-foreground italic">
                 <p>Programação sujeita a adaptações conforme demanda dos grupos</p>
             </div>
         </div>
