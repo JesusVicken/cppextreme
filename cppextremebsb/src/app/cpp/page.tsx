@@ -244,7 +244,7 @@ export default function CppPage() {
                 data-aos="fade-up"
             >
                 <video
-                    src="/bg.mp4"
+                    src="/cpp.mp4"
                     autoPlay
                     muted
                     loop
@@ -259,7 +259,7 @@ export default function CppPage() {
                         className="text-white max-w-2xl"
                     >
                         <p className="text-lg md:text-xl text-white/90">
-                            Descubra nossas experiências exclusivas na canoa havaiana
+                            Descubra nossas experiências exclusivas na CPP Extreme BSB
                         </p>
                     </motion.div>
                 </div>

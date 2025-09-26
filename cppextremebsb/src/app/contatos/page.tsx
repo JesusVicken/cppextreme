@@ -13,15 +13,11 @@ import {
 } from 'react-icons/fa'
 
 // Imagens dos parceiros
-import ondasupLogo from '../../../public/ondasup1.png'
 import ascadeLogo from '../../../public/logo-ascade1.png'
-import filhooosLogo from '../../../public/filhooos1.png'
 import canoMAMALogo from '../../../public/canoMAMAlogo1.png'
 
 const brands = [
-    { name: 'Ondasup', logo: ondasupLogo },
     { name: 'Ascade', logo: ascadeLogo },
-    { name: 'Filhooos', logo: filhooosLogo },
     { name: 'CanoMAMA', logo: canoMAMALogo },
 ]
 

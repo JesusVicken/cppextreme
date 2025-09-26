@@ -7,15 +7,11 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import { Anchor } from "lucide-react"
 
-import ondasupLogo from "../../../public/ondasup.jpg"
 import ascadeLogo from "../../../public/logo-ascade.png"
-import filhooosLogo from "../../../public/filhooos.jpg"
 import canoMAMALogo from "../../../public/canoMAMAlogo.png"
 
 const brands = [
-  { name: "Ondasup", logo: ondasupLogo },
   { name: "Ascade", logo: ascadeLogo },
-  { name: "Filhooos", logo: filhooosLogo },
   { name: "CanoMAMA", logo: canoMAMALogo },
 ]
 
