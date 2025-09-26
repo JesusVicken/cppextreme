@@ -10,28 +10,46 @@ import { motion } from 'framer-motion'
 // Dados atualizados da agenda
 const eventosPorMes = [
     {
+        mes: 'Outubro 2025 - 3ª EDIÇÃO LUAU FLUIR',
+        eventos: [
+            {
+                data: '08/10 (Qua)',
+                horario: '19:00',
+                atividade: '3ª EDIÇÃO LUAU FLUIR ✨🌕',
+                badge: 'Especial',
+                imagem: '/fluir2.jpg',
+                descricao: `Em parceria com o CPP Extreme, venha vivenciar uma noite sensorial de conexão, expansão e contemplação sob a energia da lua cheia 💫
+
+🧘‍♀️ Candle Yoga + Cacau + Sound Healing (70 vagas)
+Uma prática para despertar o corpo, abrir o coração e se entregar às vibrações sonoras que equilibram e elevam.
+🌊 Remada da Lua Cheia – Lago Paranoá (24 vagas)
+`
+            }
+        ]
+    },
+    {
         mes: 'Setembro 2025 - Remada da Lua Cheia',
         eventos: [
             {
                 data: '07/09 (Dom)',
                 horario: '17:00',
-                atividade: 'Remada da Lua Cheia - Setembro',
+                atividade: 'Remada da Lua Cheia',
                 badge: 'Natureza',
-                imagem: '/cpplua.jpeg',
+                imagem: '/lualua.jpg',
                 descricao: 'Remada especial para contemplar o nascer da lua às 18:10 no Lago Paranoá.'
             },
             {
                 data: '08/09 (Seg)',
                 horario: '18:00',
-                atividade: 'Remada da Lua Cheia - Setembro',
+                atividade: 'Remada da Lua Cheia',
                 badge: 'Natureza',
-                imagem: '/cpplua.jpeg',
+                imagem: '/lualua2.jpg',
                 descricao: 'Experiência mágica remando durante o nascer da lua às 19:07 no Lago Paranoá.'
             },
             {
                 data: '09/09 (Ter)',
                 horario: '19:00',
-                atividade: 'Remada da Lua Cheia - Setembro',
+                atividade: 'Remada da Lua Cheia',
                 badge: 'Natureza',
                 imagem: '/cpplua.jpeg',
                 descricao: 'Última oportunidade para ver a lua cheia nascendo às 20:05 no Lago Paranoá.'
@@ -71,48 +89,36 @@ const eventosPorMes = [
 
 // Função para redirecionar para o WhatsApp
 const redirectToWhatsApp = (evento: { atividade: string; data: string; horario: string }) => {
-    const phoneNumber = '556198219177';
-    const message = `Olá! Gostaria de mais informações sobre: ${evento.atividade} (${evento.data} às ${evento.horario}). Como posso participar?`;
-
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-    window.open(whatsappUrl, '_blank');
+    const phoneNumber = '556198219177'
+    const message = `Olá! Gostaria de mais informações sobre: ${evento.atividade} (${evento.data} às ${evento.horario}). Como posso participar?`
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+    window.open(whatsappUrl, '_blank')
 }
 
 export default function AgendaCompleta() {
     return (
         <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
-
-            {/* Faixa de Destaque */}
-            <div className="relative h-64 w-full overflow-hidden rounded-lg mb-12">
-                <Image
-                    src="/lualua.jpg"
-                    alt="Destaque Lua Cheia"
-                    fill
-                    className="object-cover object-center"
-                    quality={100}
+            {/* Faixa de Destaque com Vídeo */}
+            <div className="relative h-64 md:h-96 w-full overflow-hidden rounded-lg mb-12">
+                <video
+                    src="/lua.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
                 />
-
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center px-10">
                     <div className="max-w-2xl">
-                        {/* <motion.h2
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6 }}
-                            className="hidden sm:block text-3xl sm:text-4xl font-bold text-white mb-4"
-                        >
-                            Confira nossa Agenda
-                        </motion.h2> */}
                         <motion.p
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="text-lg text-white/90 absolute left-4 bottom-8 md:left-12 md:bottom-16 max-w-md"
                         >
-                            Viva experiências únicas sob a luz da lua no Lago Paranoá
+                            Viva experiências únicas no Lago Paranoá
                         </motion.p>
-
                     </div>
                 </div>
             </div>
@@ -141,18 +147,18 @@ export default function AgendaCompleta() {
                     {/* Grid de eventos */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {mes.eventos.map((evento, eventIndex) => {
-                            const isLuaCheia = evento.imagem === '/cpplua.jpeg';
+                            const isEspecial = evento.badge === 'Especial'
                             return (
                                 <div
                                     key={`${index}-${eventIndex}`}
                                     data-aos="zoom-in"
                                     data-aos-delay={eventIndex * 100}
                                 >
-                                    <Card className="h-full border-border hover:border-primary/40 transition-all flex flex-col group overflow-hidden rounded-2xl shadow-md hover:shadow-xl">
+                                    <Card className={`h-full border-border hover:border-primary/40 transition-all flex flex-col group overflow-hidden rounded-2xl shadow-md hover:shadow-xl ${isEspecial ? 'ring-2 ring-primary/40' : ''}`}>
                                         {/* Imagem com overlay e badge */}
                                         <div
                                             className={`relative w-full overflow-hidden 
-                                            ${isLuaCheia ? 'h-48 sm:h-52 md:h-60 lg:h-72' : 'h-40 sm:h-52 md:h-60 lg:h-72'}
+                                            ${isEspecial ? 'h-48 sm:h-52 md:h-60 lg:h-72' : 'h-40 sm:h-52 md:h-60 lg:h-72'}
                                         `}
                                         >
                                             <Image
@@ -162,6 +168,12 @@ export default function AgendaCompleta() {
                                                 className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
+
+                                            {/* Overlay Liquid Glass para evento especial */}
+                                            {isEspecial && (
+                                                <div className="absolute inset-0 bg-white/20 backdrop-blur-lg rounded-2xl pointer-events-none mix-blend-overlay animate-pulse"></div>
+                                            )}
+
                                             <Badge
                                                 variant="outline"
                                                 className="absolute top-3 right-3 backdrop-blur-sm bg-white/30 dark:bg-black/30 border-white/30 text-white dark:text-gray-100"
@@ -172,10 +184,10 @@ export default function AgendaCompleta() {
 
                                         {/* Conteúdo do card */}
                                         <CardHeader className="pb-2">
-                                            <CardTitle className="text-lg sm:text-xl group-hover:text-primary transition-colors duration-300">
+                                            <CardTitle className={`text-lg sm:text-xl group-hover:text-primary transition-colors duration-300 ${isEspecial ? 'text-primary' : ''}`}>
                                                 {evento.atividade}
                                             </CardTitle>
-                                            <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">
+                                            <p className="text-sm sm:text-base text-muted-foreground line-clamp-4">
                                                 {evento.descricao}
                                             </p>
                                         </CardHeader>
@@ -200,7 +212,7 @@ export default function AgendaCompleta() {
                                                 className="w-full group-hover:border-primary group-hover:text-primary group-hover:bg-primary/10 transition-all duration-300"
                                                 size="sm"
                                             >
-                                                <span>Mais informações</span>
+                                                <span>Quero marcar minha remada!</span>
                                                 <ChevronRight className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-1 transition-all" />
                                             </Button>
                                         </CardContent>
