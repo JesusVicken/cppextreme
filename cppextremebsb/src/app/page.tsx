@@ -6,7 +6,6 @@ import { Tours } from "./_components/tours"
 import { Footer } from "./_components/footer"
 import CheckVaa from "./_components/checkVaa"
 import { ParallaxWrapper } from "./_components/ParallaxWrapper"
-// import FooterDev from "./_components/footer-dev"
 import WhatsappWrapper from "./_components/whatsapp-wrapper"
 import HeroSection from "./_components/HeroSection"
 
@@ -25,7 +24,7 @@ export default function Home() {
         <Services />
         <CheckVaa />
         <Footer />
-        {/* <FooterDev /> */}
+        
       </WhatsappWrapper>
     </main>
   )

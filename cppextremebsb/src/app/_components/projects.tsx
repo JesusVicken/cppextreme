@@ -1,7 +1,6 @@
 'use client'
 
 import { Parallax } from 'react-scroll-parallax'
-import Image from 'next/image'
 import { WhatsappLogo } from '@phosphor-icons/react'
 
 export default function Projects() {
@@ -12,15 +11,14 @@ export default function Projects() {
         >
             <Parallax speed={-20} className="absolute inset-0">
                 <div className="relative w-full h-full">
-                    <Image
-                        src="/remadalinda.jpg"
-                        alt="Canoa Havaiana"
-                        fill
-                        className="object-cover"
-                        style={{
-                            objectPosition: 'center 30%',
-                        }}
-                        priority
+                    <video
+                        src="/cpp2.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                        style={{ objectPosition: 'center 30%' }}
                     />
                 </div>
             </Parallax>
