@@ -165,7 +165,7 @@ export default function AgendaCompleta() {
                             Agenda 2025
                         </Badge>
                         <h1 data-aos="fade-up" data-aos-delay="300" className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight">
-                            PROGRAMAÇÃO <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">EXTREME</span>
+                            PROGRAMAÇÃO <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">CPP EXTREME</span>
                         </h1>
                         <p data-aos="fade-up" data-aos-delay="400" className="text-gray-200 text-lg md:text-xl max-w-2xl">
                             Conecte-se com a natureza e supere seus limites nas águas do Lago Paranoá.
