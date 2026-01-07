@@ -251,12 +251,41 @@ const eventosEspeciais = [
             { dataStr: '27/09', diaSemana: '(Dom)', horario: '18:00', atividade: 'Remada da Lua Cheia - CPP Extreme 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
             { dataStr: '28/09', diaSemana: '(Seg)', horario: '19:00', atividade: 'Remada da Lua Cheia - CPP Extreme 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
         ]
+    },
+    {
+        mes: 'Outubro 2026',
+        year: 2026,
+        eventos: [
+            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '04/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '11/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '18/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '25/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '26/10', diaSemana: '(Seg)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '27/10', diaSemana: '(Ter)', horario: '17:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '27/10', diaSemana: '(Ter)', horario: '19:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+        ]
     }
 ]
 
 const generateAllEvents = (): Evento[] => {
     const events: Evento[] = []
 
+    // 1. Adicionar eventos manuais (Experiências e Luas)
     eventosEspeciais.forEach(grupo => {
         grupo.eventos.forEach((ev, idx) => {
             const dateString = `${ev.dataStr}/${grupo.year}`
@@ -276,7 +305,9 @@ const generateAllEvents = (): Evento[] => {
         })
     })
 
-    const mesesParaGerar = [0, 1, 2, 3, 4, 5, 6, 7, 8] // Jan a Set
+    // 2. Gerar Treinos de Rotina para O ANO TODO (Jan a Dez 2026)
+    // 0 = Jan, 11 = Dez
+    const mesesParaGerar = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
     mesesParaGerar.forEach(mesIndex => {
         const ano = 2026
@@ -287,27 +318,22 @@ const generateAllEvents = (): Evento[] => {
             const diaSemana = getDay(currentData)
             const diaMes = getDate(currentData)
 
-            const isFeriadoFixo =
-                (mesIndex === 0 && diaMes === 1) ||
-                (mesIndex === 4 && diaMes === 1) ||
-                // (mesIndex === 8 && diaMes === 7) ||  // 7 de Setembro tem treino normal
-                (mesIndex === 10 && diaMes === 2) ||
-                (mesIndex === 10 && diaMes === 15) ||
-                (mesIndex === 11 && diaMes === 25);
-
-            if (isFeriadoFixo) continue;
-
             if (diaSemana >= 1 && diaSemana <= 5) {
                 const diaFormatado = format(currentData, 'dd/MM', { locale: ptBR })
                 const diaSemanaStr = format(currentData, '(EEE)', { locale: ptBR })
                 let horariosDoDia: string[] = []
 
                 if (mesIndex === 0) {
+                    // JANEIRO
                     horariosDoDia = ['06:00', '07:30', '12:15']
                 } else {
+                    // FEVEREIRO A DEZEMBRO (Padrão 2026)
+                    // Seg, Qua, Sex: 06:00, 07:30, 12:15, 17:40
                     if (diaSemana === 1 || diaSemana === 3 || diaSemana === 5) {
                         horariosDoDia = ['06:00', '07:30', '12:15', '17:40']
-                    } else {
+                    }
+                    // Ter, Qui: 06:00, 07:30, 17:40 (Sem 12:15)
+                    else {
                         horariosDoDia = ['06:00', '07:30', '17:40']
                     }
                 }
