@@ -83,7 +83,7 @@ export function Services() {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12" data-aos="fade-up">
                     <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-                        HORÁRIOS DAS AULAS
+                        REMADAS ESCOLA
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto">
                         Confira nossos horários disponíveis por dia da semana

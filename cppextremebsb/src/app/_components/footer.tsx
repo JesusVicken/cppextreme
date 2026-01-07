@@ -20,7 +20,7 @@ const brands = [
 export function Footer() {
   const whatsappNumber = "61998219177"
   const whatsappMessage =
-    "Olá, gostaria de mais informações sobre as aulas de remo na CPP Extreme!"
+    "Olá, gostaria de mais informações sobre as remadas na CPP Extreme!"
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
 
   return (

@@ -39,7 +39,7 @@ export default function Header() {
         { href: '/passeios', label: 'Passeios' },
         { href: '/agenda', label: 'Agenda' },
         { href: '/extreme', label: 'Extreme' },
-        { href: '/contato', label: 'Contato' },
+        { href: '/contatos', label: 'Contato' },
     ]
 
     return (

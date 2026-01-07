@@ -41,7 +41,7 @@ export function About() {
                             Somos a base <strong>CPP Extreme BSB</strong>, coletivo de canoa polinésia nascida em Vitória em 2012 e em Brasília desde 2018.
                         </p>
                         <p className="text-gray-700">
-                            Na <strong>CPP Extreme BSB</strong> oferecemos aulas regulares de segunda a sábado para todos os níveis. A escola é para quem quer aprender a remar com o objetivo de participar de competições, expedições e travessias com segurança e conforto.
+                            Na <strong>CPP Extreme BSB</strong> oferecemos remadas regulares de segunda a sábado para todos os níveis. A escola é para quem quer aprender a remar com o objetivo de participar de competições, expedições e travessias com segurança e conforto.
                         </p>
                         <p className="text-gray-700">
                             Também oferecemos diferentes tipos de passeios que acontecem fora dos horários regulares, como a remada da lua cheia, nascer do sol e remadas festivas.
@@ -59,7 +59,7 @@ export function About() {
                         <div className="flex flex-wrap gap-3">
                             <a
                                 target="_blank"
-                                href={`https://wa.me/5561998219177?text=Olá! Gostaria de saber mais sobre as aulas de Canoa Havaiana da CPP Extreme BSB.`}
+                                href={`https://wa.me/5561998219177?text=Olá! Gostaria de saber mais sobre as remadas de Canoa Havaiana da CPP Extreme BSB.`}
                                 className="bg-green-600 text-white flex items-center justify-center w-fit gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition"
                             >
                                 <WhatsappLogo className="w-5 h-5" />

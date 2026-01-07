@@ -1,5 +1,4 @@
-import { parse, isValid, getDay, format, getDate } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { parse, isValid } from 'date-fns'
 
 export type Evento = {
     id: string
@@ -12,332 +11,753 @@ export type Evento = {
     descricao: string
 }
 
-const eventosEspeciais = [
+// Funções auxiliares para manter o código limpo
+const createTreino = (date: string, diaSemana: string, horario: string) => ({
+    dataStr: date,
+    diaSemana,
+    horario,
+    atividade: `Treino CPP ${horario}`,
+    badge: 'Treino',
+    imagem: '/cpplua.jpeg',
+    descricao: 'Treino regular de Canoa Havaiana. Foco em técnica, condicionamento e sincronia.'
+})
+
+const createEspecial = (date: string, diaSemana: string, horario: string, atividade: string, badge: string, imagem: string, descricao: string) => ({
+    dataStr: date,
+    diaSemana,
+    horario,
+    atividade,
+    badge,
+    imagem,
+    descricao
+})
+
+// Dados COMPLETOS de Janeiro a Dezembro de 2026
+const rawData = [
     {
         mes: 'Janeiro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '10/01', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Comece o dia recarregando as energias com o nascer do sol no Lago Paranoá.' },
-            { dataStr: '10/01', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Um passeio tranquilo para apreciar a natureza e relaxar nas águas.' },
-            { dataStr: '10/01', diaSemana: '(Sáb)', horario: '16:00', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Contemple o pôr do sol mais bonito de Brasília de dentro da canoa.' },
-            { dataStr: '11/01', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo é dia de relaxar. Venha remar sem pressa.' },
-            { dataStr: '17/01', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'A melhor forma de começar o final de semana.' },
-            { dataStr: '17/01', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Curta a manhã de sábado com uma remada leve.' },
-            { dataStr: '17/01', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour no lago. Experiência inesquecível.' },
-            { dataStr: '18/01', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Remada para toda a família.' },
-            { dataStr: '24/01', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Desperte com o sol nascendo no horizonte.' },
-            { dataStr: '24/01', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Conexão com a natureza e esporte.' },
-            { dataStr: '24/01', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Encerre o dia com chave de ouro.' },
-            { dataStr: '25/01', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Atividade relaxante para o seu domingo.' },
-            { dataStr: '31/01', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Último nascer do sol de janeiro. Aproveite!' },
-            { dataStr: '31/01', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Manhã de sol e água fresca.' },
-            { dataStr: '31/01', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Despeça-se de janeiro com um visual incrível.' },
+            // --- SEMANA 2 (05-11) ---
+            createTreino('05/01', '(Seg)', '06:00'), createTreino('05/01', '(Seg)', '07:30'), createTreino('05/01', '(Seg)', '12:15'),
+            createTreino('06/01', '(Ter)', '06:00'), createTreino('06/01', '(Ter)', '07:30'), createTreino('06/01', '(Ter)', '12:15'),
+            createTreino('07/01', '(Qua)', '06:00'), createTreino('07/01', '(Qua)', '07:30'), createTreino('07/01', '(Qua)', '12:15'),
+            createTreino('08/01', '(Qui)', '06:00'), createTreino('08/01', '(Qui)', '07:30'), createTreino('08/01', '(Qui)', '12:15'),
+            createTreino('09/01', '(Sex)', '06:00'), createTreino('09/01', '(Sex)', '07:30'), createTreino('09/01', '(Sex)', '12:15'),
+            createEspecial('10/01', '(Sáb)', '05:00', 'Remada do Nascer do Sol 🌅', 'Energia', '/lualua.jpg', 'Comece o dia recarregando as energias.'),
+            createEspecial('10/01', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', 'Um passeio tranquilo.'),
+            createEspecial('10/01', '(Sáb)', '16:00', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', 'Contemple o pôr do sol.'),
+            createEspecial('11/01', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', 'Domingo relax.'),
+
+            // --- SEMANA 3 (12-18) ---
+            createTreino('12/01', '(Seg)', '06:00'), createTreino('12/01', '(Seg)', '07:30'), createTreino('12/01', '(Seg)', '12:15'),
+            createTreino('13/01', '(Ter)', '06:00'), createTreino('13/01', '(Ter)', '07:30'), createTreino('13/01', '(Ter)', '12:15'),
+            createTreino('14/01', '(Qua)', '06:00'), createTreino('14/01', '(Qua)', '07:30'), createTreino('14/01', '(Qua)', '12:15'),
+            createTreino('15/01', '(Qui)', '06:00'), createTreino('15/01', '(Qui)', '07:30'), createTreino('15/01', '(Qui)', '12:15'),
+            createTreino('16/01', '(Sex)', '06:00'), createTreino('16/01', '(Sex)', '07:30'), createTreino('16/01', '(Sex)', '12:15'),
+            createEspecial('17/01', '(Sáb)', '05:00', 'Remada do Nascer do Sol 🌅', 'Energia', '/lualua.jpg', 'Nascer do sol.'),
+            createEspecial('17/01', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', 'Passeio relaxante.'),
+            createEspecial('17/01', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', 'Golden hour.'),
+            createEspecial('18/01', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', 'Domingo relax.'),
+
+            // --- SEMANA 4 (19-25) ---
+            createTreino('19/01', '(Seg)', '06:00'), createTreino('19/01', '(Seg)', '07:30'), createTreino('19/01', '(Seg)', '12:15'),
+            createTreino('20/01', '(Ter)', '06:00'), createTreino('20/01', '(Ter)', '07:30'), createTreino('20/01', '(Ter)', '12:15'),
+            createTreino('21/01', '(Qua)', '06:00'), createTreino('21/01', '(Qua)', '07:30'), createTreino('21/01', '(Qua)', '12:15'),
+            createTreino('22/01', '(Qui)', '06:00'), createTreino('22/01', '(Qui)', '07:30'), createTreino('22/01', '(Qui)', '12:15'),
+            createTreino('23/01', '(Sex)', '06:00'), createTreino('23/01', '(Sex)', '07:30'), createTreino('23/01', '(Sex)', '12:15'),
+            createEspecial('24/01', '(Sáb)', '05:00', 'Remada do Nascer do Sol 🌅', 'Energia', '/lualua.jpg', 'Nascer do sol.'),
+            createEspecial('24/01', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', 'Passeio relaxante.'),
+            createEspecial('24/01', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', 'Golden hour.'),
+            createEspecial('25/01', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', 'Domingo relax.'),
+
+            // --- SEMANA 5 (26-31) ---
+            createTreino('26/01', '(Seg)', '06:00'), createTreino('26/01', '(Seg)', '07:30'), createTreino('26/01', '(Seg)', '12:15'),
+            createTreino('27/01', '(Ter)', '06:00'), createTreino('27/01', '(Ter)', '07:30'), createTreino('27/01', '(Ter)', '12:15'),
+            createTreino('28/01', '(Qua)', '06:00'), createTreino('28/01', '(Qua)', '07:30'), createTreino('28/01', '(Qua)', '12:15'),
+            createTreino('29/01', '(Qui)', '06:00'), createTreino('29/01', '(Qui)', '07:30'), createTreino('29/01', '(Qui)', '12:15'),
+            createTreino('30/01', '(Sex)', '06:00'), createTreino('30/01', '(Sex)', '07:30'), createTreino('30/01', '(Sex)', '12:15'),
+            createEspecial('31/01', '(Sáb)', '05:00', 'Remada do Nascer do Sol 🌅', 'Energia', '/lualua.jpg', 'Nascer do sol.'),
+            createEspecial('31/01', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', 'Passeio relaxante.'),
+            createEspecial('31/01', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', 'Golden hour.'),
         ]
     },
     {
         mes: 'Fevereiro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '01/02', diaSemana: '(Dom)', horario: '17:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Experiência mágica remando sob a luz da lua cheia.' },
-            { dataStr: '02/02', diaSemana: '(Seg)', horario: '18:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Contemple o nascer da lua de dentro do lago.' },
-            { dataStr: '03/02', diaSemana: '(Ter)', horario: '19:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Última chance de curtir a lua cheia de fevereiro.' },
-            { dataStr: '07/02', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol incrível no lago.' },
-            { dataStr: '07/02', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '07/02', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '08/02', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '14/02', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol incrível no lago.' },
-            { dataStr: '14/02', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '14/02', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '15/02', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '21/02', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol incrível no lago.' },
-            { dataStr: '21/02', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '21/02', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '22/02', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '28/02', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol incrível no lago.' },
-            { dataStr: '28/02', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '28/02', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            createEspecial('01/02', '(Dom)', '17:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', 'Lua Cheia.'),
+
+            // Semana 1 (02-08)
+            createTreino('02/02', '(Seg)', '06:00'), createTreino('02/02', '(Seg)', '07:30'), createTreino('02/02', '(Seg)', '12:15'), createTreino('02/02', '(Seg)', '17:40'),
+            createEspecial('02/02', '(Seg)', '18:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', 'Lua Cheia.'),
+
+            createTreino('03/02', '(Ter)', '06:00'), createTreino('03/02', '(Ter)', '07:30'), createTreino('03/02', '(Ter)', '17:40'),
+            createEspecial('03/02', '(Ter)', '19:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', 'Lua Cheia.'),
+
+            createTreino('04/02', '(Qua)', '06:00'), createTreino('04/02', '(Qua)', '07:30'), createTreino('04/02', '(Qua)', '12:15'), createTreino('04/02', '(Qua)', '17:40'),
+            createTreino('05/02', '(Qui)', '06:00'), createTreino('05/02', '(Qui)', '07:30'), createTreino('05/02', '(Qui)', '17:40'),
+            createTreino('06/02', '(Sex)', '06:00'), createTreino('06/02', '(Sex)', '07:30'), createTreino('06/02', '(Sex)', '12:15'), createTreino('06/02', '(Sex)', '17:40'),
+
+            createEspecial('07/02', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('07/02', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('07/02', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('08/02', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (09-15)
+            createTreino('09/02', '(Seg)', '06:00'), createTreino('09/02', '(Seg)', '07:30'), createTreino('09/02', '(Seg)', '12:15'), createTreino('09/02', '(Seg)', '17:40'),
+            createTreino('10/02', '(Ter)', '06:00'), createTreino('10/02', '(Ter)', '07:30'), createTreino('10/02', '(Ter)', '17:40'),
+            createTreino('11/02', '(Qua)', '06:00'), createTreino('11/02', '(Qua)', '07:30'), createTreino('11/02', '(Qua)', '12:15'), createTreino('11/02', '(Qua)', '17:40'),
+            createTreino('12/02', '(Qui)', '06:00'), createTreino('12/02', '(Qui)', '07:30'), createTreino('12/02', '(Qui)', '17:40'),
+            createTreino('13/02', '(Sex)', '06:00'), createTreino('13/02', '(Sex)', '07:30'), createTreino('13/02', '(Sex)', '12:15'), createTreino('13/02', '(Sex)', '17:40'),
+
+            createEspecial('14/02', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('14/02', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('14/02', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('15/02', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (16-22)
+            createTreino('16/02', '(Seg)', '06:00'), createTreino('16/02', '(Seg)', '07:30'), createTreino('16/02', '(Seg)', '12:15'), createTreino('16/02', '(Seg)', '17:40'), // Carnaval (treino normal na imagem)
+            createTreino('17/02', '(Ter)', '06:00'), createTreino('17/02', '(Ter)', '07:30'), createTreino('17/02', '(Ter)', '17:40'),
+            createTreino('18/02', '(Qua)', '06:00'), createTreino('18/02', '(Qua)', '07:30'), createTreino('18/02', '(Qua)', '12:15'), createTreino('18/02', '(Qua)', '17:40'),
+            createTreino('19/02', '(Qui)', '06:00'), createTreino('19/02', '(Qui)', '07:30'), createTreino('19/02', '(Qui)', '17:40'),
+            createTreino('20/02', '(Sex)', '06:00'), createTreino('20/02', '(Sex)', '07:30'), createTreino('20/02', '(Sex)', '12:15'), createTreino('20/02', '(Sex)', '17:40'),
+
+            createEspecial('21/02', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('21/02', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('21/02', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('22/02', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (23-28)
+            createTreino('23/02', '(Seg)', '06:00'), createTreino('23/02', '(Seg)', '07:30'), createTreino('23/02', '(Seg)', '12:15'), createTreino('23/02', '(Seg)', '17:40'),
+            createTreino('24/02', '(Ter)', '06:00'), createTreino('24/02', '(Ter)', '07:30'), createTreino('24/02', '(Ter)', '17:40'),
+            createTreino('25/02', '(Qua)', '06:00'), createTreino('25/02', '(Qua)', '07:30'), createTreino('25/02', '(Qua)', '12:15'), createTreino('25/02', '(Qua)', '17:40'),
+            createTreino('26/02', '(Qui)', '06:00'), createTreino('26/02', '(Qui)', '07:30'), createTreino('26/02', '(Qui)', '17:40'),
+            createTreino('27/02', '(Sex)', '06:00'), createTreino('27/02', '(Sex)', '07:30'), createTreino('27/02', '(Sex)', '12:15'), createTreino('27/02', '(Sex)', '17:40'),
+
+            createEspecial('28/02', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('28/02', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('28/02', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
         ]
     },
     {
         mes: 'Março 2026',
         year: 2026,
         eventos: [
-            { dataStr: '06/03', diaSemana: '(Sex)', horario: '08:00', atividade: 'Sprint Seletiva 🏆', badge: 'Competição', imagem: '/cpplua.jpeg', descricao: 'Seletiva de Sprint para atletas.' },
-            { dataStr: '07/03', diaSemana: '(Sáb)', horario: '08:00', atividade: 'Sprint Seletiva 🏆', badge: 'Competição', imagem: '/cpplua.jpeg', descricao: 'Continuação da Seletiva de Sprint.' },
-            { dataStr: '08/03', diaSemana: '(Dom)', horario: '08:00', atividade: 'Sprint Seletiva 🏆', badge: 'Competição', imagem: '/cpplua.jpeg', descricao: 'Finais da Seletiva de Sprint.' },
-            { dataStr: '02/03', diaSemana: '(Seg)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '03/03', diaSemana: '(Ter)', horario: '17:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '04/03', diaSemana: '(Qua)', horario: '18:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '05/03', diaSemana: '(Qui)', horario: '18:50', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '07/03', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '07/03', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '07/03', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '08/03', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '14/03', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '14/03', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '14/03', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '15/03', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '21/03', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '21/03', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '21/03', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '22/03', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '28/03', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '28/03', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '28/03', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '29/03', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            createEspecial('02/03', '(Seg)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('03/03', '(Ter)', '17:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('04/03', '(Qua)', '18:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('05/03', '(Qui)', '18:50', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('06/03', '(Sex)', '08:00', 'Sprint Seletiva 🏆', 'Competição', '/cpplua.jpeg', ''),
+            createEspecial('07/03', '(Sáb)', '08:00', 'Sprint Seletiva 🏆', 'Competição', '/cpplua.jpeg', ''),
+            createEspecial('08/03', '(Dom)', '08:00', 'Sprint Seletiva 🏆', 'Competição', '/cpplua.jpeg', ''),
+
+            // Semana 1 (02-08) - Treinos normais
+            createTreino('02/03', '(Seg)', '06:00'), createTreino('02/03', '(Seg)', '07:30'), createTreino('02/03', '(Seg)', '12:15'), createTreino('02/03', '(Seg)', '17:40'),
+            createTreino('03/03', '(Ter)', '06:00'), createTreino('03/03', '(Ter)', '07:30'), createTreino('03/03', '(Ter)', '17:40'),
+            createTreino('04/03', '(Qua)', '06:00'), createTreino('04/03', '(Qua)', '07:30'), createTreino('04/03', '(Qua)', '12:15'), createTreino('04/03', '(Qua)', '17:40'),
+            createTreino('05/03', '(Qui)', '06:00'), createTreino('05/03', '(Qui)', '07:30'), createTreino('05/03', '(Qui)', '17:40'),
+            createTreino('06/03', '(Sex)', '06:00'), createTreino('06/03', '(Sex)', '07:30'), createTreino('06/03', '(Sex)', '12:15'), createTreino('06/03', '(Sex)', '17:40'),
+
+            createEspecial('07/03', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('07/03', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('07/03', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('08/03', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (09-15)
+            createTreino('09/03', '(Seg)', '06:00'), createTreino('09/03', '(Seg)', '07:30'), createTreino('09/03', '(Seg)', '12:15'), createTreino('09/03', '(Seg)', '17:40'),
+            createTreino('10/03', '(Ter)', '06:00'), createTreino('10/03', '(Ter)', '07:30'), createTreino('10/03', '(Ter)', '17:40'),
+            createTreino('11/03', '(Qua)', '06:00'), createTreino('11/03', '(Qua)', '07:30'), createTreino('11/03', '(Qua)', '12:15'), createTreino('11/03', '(Qua)', '17:40'),
+            createTreino('12/03', '(Qui)', '06:00'), createTreino('12/03', '(Qui)', '07:30'), createTreino('12/03', '(Qui)', '17:40'),
+            createTreino('13/03', '(Sex)', '06:00'), createTreino('13/03', '(Sex)', '07:30'), createTreino('13/03', '(Sex)', '12:15'), createTreino('13/03', '(Sex)', '17:40'),
+
+            createEspecial('14/03', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('14/03', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('14/03', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('15/03', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (16-22)
+            createTreino('16/03', '(Seg)', '06:00'), createTreino('16/03', '(Seg)', '07:30'), createTreino('16/03', '(Seg)', '12:15'), createTreino('16/03', '(Seg)', '17:40'),
+            createTreino('17/03', '(Ter)', '06:00'), createTreino('17/03', '(Ter)', '07:30'), createTreino('17/03', '(Ter)', '17:40'),
+            createTreino('18/03', '(Qua)', '06:00'), createTreino('18/03', '(Qua)', '07:30'), createTreino('18/03', '(Qua)', '12:15'), createTreino('18/03', '(Qua)', '17:40'),
+            createTreino('19/03', '(Qui)', '06:00'), createTreino('19/03', '(Qui)', '07:30'), createTreino('19/03', '(Qui)', '17:40'),
+            createTreino('20/03', '(Sex)', '06:00'), createTreino('20/03', '(Sex)', '07:30'), createTreino('20/03', '(Sex)', '12:15'), createTreino('20/03', '(Sex)', '17:40'),
+
+            createEspecial('21/03', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('21/03', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('21/03', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('22/03', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (23-29)
+            createTreino('23/03', '(Seg)', '06:00'), createTreino('23/03', '(Seg)', '07:30'), createTreino('23/03', '(Seg)', '12:15'), createTreino('23/03', '(Seg)', '17:40'),
+            createTreino('24/03', '(Ter)', '06:00'), createTreino('24/03', '(Ter)', '07:30'), createTreino('24/03', '(Ter)', '17:40'),
+            createTreino('25/03', '(Qua)', '06:00'), createTreino('25/03', '(Qua)', '07:30'), createTreino('25/03', '(Qua)', '12:15'), createTreino('25/03', '(Qua)', '17:40'),
+            createTreino('26/03', '(Qui)', '06:00'), createTreino('26/03', '(Qui)', '07:30'), createTreino('26/03', '(Qui)', '17:40'),
+            createTreino('27/03', '(Sex)', '06:00'), createTreino('27/03', '(Sex)', '07:30'), createTreino('27/03', '(Sex)', '12:15'), createTreino('27/03', '(Sex)', '17:40'),
+
+            createEspecial('28/03', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('28/03', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('28/03', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('29/03', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (30-31)
+            createTreino('30/03', '(Seg)', '06:00'), createTreino('30/03', '(Seg)', '07:30'), createTreino('30/03', '(Seg)', '12:15'), createTreino('30/03', '(Seg)', '17:40'),
+            createTreino('31/03', '(Ter)', '06:00'), createTreino('31/03', '(Ter)', '07:30'), createTreino('31/03', '(Ter)', '17:40'),
         ]
     },
     {
         mes: 'Abril 2026',
         year: 2026,
         eventos: [
-            { dataStr: '01/04', diaSemana: '(Qua)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial sob a luz do luar.' },
-            { dataStr: '01/04', diaSemana: '(Qua)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Experiência noturna no lago.' },
-            { dataStr: '02/04', diaSemana: '(Qui)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Contemple a lua cheia de abril.' },
-            { dataStr: '03/04', diaSemana: '(Sex)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Sexta-feira de lua cheia.' },
-            { dataStr: '11/04', diaSemana: '(Sáb)', horario: '07:00', atividade: 'Brasileiro de Va\'a OC6 🏆', badge: 'Competição', imagem: '/cpplua.jpeg', descricao: 'Campeonato Brasileiro de Va\'a OC6. Venha torcer ou competir!' },
-            { dataStr: '12/04', diaSemana: '(Dom)', horario: '07:00', atividade: 'Brasileiro de Va\'a OC6 🏆', badge: 'Competição', imagem: '/cpplua.jpeg', descricao: 'Segundo dia do Campeonato Brasileiro de Va\'a OC6.' },
-            { dataStr: '25/04', diaSemana: '(Sáb)', horario: '06:00', atividade: 'Volta ao Lago CPP Revezamento 🚣‍♀️', badge: 'Desafio', imagem: '/cpplua.jpeg', descricao: 'Desafio de revezamento Volta ao Lago. Prepare sua equipe!' },
-            { dataStr: '30/04', diaSemana: '(Qui)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '04/04', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '04/04', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '04/04', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '05/04', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '11/04', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '11/04', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '11/04', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '18/04', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '18/04', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '18/04', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '19/04', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '25/04', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '25/04', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '26/04', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            createEspecial('01/04', '(Qua)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('01/04', '(Qua)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('02/04', '(Qui)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('03/04', '(Sex)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('11/04', '(Sáb)', '07:00', 'Brasileiro de Va\'a OC6 🏆', 'Competição', '/cpplua.jpeg', ''),
+            createEspecial('12/04', '(Dom)', '07:00', 'Brasileiro de Va\'a OC6 🏆', 'Competição', '/cpplua.jpeg', ''),
+            createEspecial('25/04', '(Sáb)', '06:00', 'Volta ao Lago CPP Revezamento 🚣‍♀️', 'Desafio', '/cpplua.jpeg', ''),
+            createEspecial('30/04', '(Qui)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-05)
+            createTreino('01/04', '(Qua)', '06:00'), createTreino('01/04', '(Qua)', '07:30'), createTreino('01/04', '(Qua)', '12:15'), createTreino('01/04', '(Qua)', '17:40'),
+            createTreino('02/04', '(Qui)', '06:00'), createTreino('02/04', '(Qui)', '07:30'), createTreino('02/04', '(Qui)', '17:40'),
+            createTreino('03/04', '(Sex)', '06:00'), createTreino('03/04', '(Sex)', '07:30'), createTreino('03/04', '(Sex)', '12:15'), createTreino('03/04', '(Sex)', '17:40'),
+
+            createEspecial('04/04', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('04/04', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('04/04', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('05/04', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (06-12)
+            createTreino('06/04', '(Seg)', '06:00'), createTreino('06/04', '(Seg)', '07:30'), createTreino('06/04', '(Seg)', '12:15'), createTreino('06/04', '(Seg)', '17:40'),
+            createTreino('07/04', '(Ter)', '06:00'), createTreino('07/04', '(Ter)', '07:30'), createTreino('07/04', '(Ter)', '17:40'),
+            createTreino('08/04', '(Qua)', '06:00'), createTreino('08/04', '(Qua)', '07:30'), createTreino('08/04', '(Qua)', '12:15'), createTreino('08/04', '(Qua)', '17:40'),
+            createTreino('09/04', '(Qui)', '06:00'), createTreino('09/04', '(Qui)', '07:30'), createTreino('09/04', '(Qui)', '17:40'),
+            createTreino('10/04', '(Sex)', '06:00'), createTreino('10/04', '(Sex)', '07:30'), createTreino('10/04', '(Sex)', '12:15'), createTreino('10/04', '(Sex)', '17:40'),
+
+            createEspecial('11/04', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('11/04', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('11/04', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+
+            // Semana 3 (13-19)
+            createTreino('13/04', '(Seg)', '06:00'), createTreino('13/04', '(Seg)', '07:30'), createTreino('13/04', '(Seg)', '12:15'), createTreino('13/04', '(Seg)', '17:40'),
+            createTreino('14/04', '(Ter)', '06:00'), createTreino('14/04', '(Ter)', '07:30'), createTreino('14/04', '(Ter)', '17:40'),
+            createTreino('15/04', '(Qua)', '06:00'), createTreino('15/04', '(Qua)', '07:30'), createTreino('15/04', '(Qua)', '12:15'), createTreino('15/04', '(Qua)', '17:40'),
+            createTreino('16/04', '(Qui)', '06:00'), createTreino('16/04', '(Qui)', '07:30'), createTreino('16/04', '(Qui)', '17:40'),
+            createTreino('17/04', '(Sex)', '06:00'), createTreino('17/04', '(Sex)', '07:30'), createTreino('17/04', '(Sex)', '12:15'), createTreino('17/04', '(Sex)', '17:40'),
+
+            createEspecial('18/04', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('18/04', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('18/04', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('19/04', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (20-26)
+            createTreino('20/04', '(Seg)', '06:00'), createTreino('20/04', '(Seg)', '07:30'), createTreino('20/04', '(Seg)', '12:15'), createTreino('20/04', '(Seg)', '17:40'),
+            createTreino('21/04', '(Ter)', '06:00'), createTreino('21/04', '(Ter)', '07:30'), createTreino('21/04', '(Ter)', '17:40'),
+            createTreino('22/04', '(Qua)', '06:00'), createTreino('22/04', '(Qua)', '07:30'), createTreino('22/04', '(Qua)', '12:15'), createTreino('22/04', '(Qua)', '17:40'),
+            createTreino('23/04', '(Qui)', '06:00'), createTreino('23/04', '(Qui)', '07:30'), createTreino('23/04', '(Qui)', '17:40'),
+            createTreino('24/04', '(Sex)', '06:00'), createTreino('24/04', '(Sex)', '07:30'), createTreino('24/04', '(Sex)', '12:15'), createTreino('24/04', '(Sex)', '17:40'),
+
+            createEspecial('25/04', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('25/04', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('26/04', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (27-30)
+            createTreino('27/04', '(Seg)', '06:00'), createTreino('27/04', '(Seg)', '07:30'), createTreino('27/04', '(Seg)', '12:15'), createTreino('27/04', '(Seg)', '17:40'),
+            createTreino('28/04', '(Ter)', '06:00'), createTreino('28/04', '(Ter)', '07:30'), createTreino('28/04', '(Ter)', '17:40'),
+            createTreino('29/04', '(Qua)', '06:00'), createTreino('29/04', '(Qua)', '07:30'), createTreino('29/04', '(Qua)', '12:15'), createTreino('29/04', '(Qua)', '17:40'),
+            createTreino('30/04', '(Qui)', '06:00'), createTreino('30/04', '(Qui)', '07:30'), createTreino('30/04', '(Qui)', '17:40'),
         ]
     },
     {
         mes: 'Maio 2026',
         year: 2026,
         eventos: [
-            { dataStr: '01/05', diaSemana: '(Sex)', horario: '16:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '02/05', diaSemana: '(Sáb)', horario: '17:10', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '03/05', diaSemana: '(Dom)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '04/05', diaSemana: '(Seg)', horario: '19:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '02/05', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '02/05', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '03/05', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '09/05', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '09/05', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '09/05', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '10/05', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '16/05', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '16/05', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '16/05', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '17/05', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '23/05', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '23/05', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '23/05', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '24/05', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '30/05', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '30/05', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '30/05', diaSemana: '(Sáb)', horario: '16:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '31/05', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '31/05', diaSemana: '(Dom)', horario: '16:40', atividade: 'Remada da Lua Cheia - Blue Moon 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Evento especial Blue Moon.' }
+            createEspecial('01/05', '(Sex)', '16:30', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('02/05', '(Sáb)', '17:10', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('03/05', '(Dom)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('04/05', '(Seg)', '19:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('30/05', '(Sáb)', '16:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('31/05', '(Dom)', '16:40', 'Remada da Lua Cheia - Blue Moon 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-03)
+            createTreino('01/05', '(Sex)', '06:00'), createTreino('01/05', '(Sex)', '07:30'), createTreino('01/05', '(Sex)', '12:15'), createTreino('01/05', '(Sex)', '17:40'), // Treino no feriado
+            createEspecial('02/05', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('02/05', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('03/05', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (04-10)
+            createTreino('04/05', '(Seg)', '06:00'), createTreino('04/05', '(Seg)', '07:30'), createTreino('04/05', '(Seg)', '12:15'), createTreino('04/05', '(Seg)', '17:40'),
+            createTreino('05/05', '(Ter)', '06:00'), createTreino('05/05', '(Ter)', '07:30'), createTreino('05/05', '(Ter)', '17:40'),
+            createTreino('06/05', '(Qua)', '06:00'), createTreino('06/05', '(Qua)', '07:30'), createTreino('06/05', '(Qua)', '12:15'), createTreino('06/05', '(Qua)', '17:40'),
+            createTreino('07/05', '(Qui)', '06:00'), createTreino('07/05', '(Qui)', '07:30'), createTreino('07/05', '(Qui)', '17:40'),
+            createTreino('08/05', '(Sex)', '06:00'), createTreino('08/05', '(Sex)', '07:30'), createTreino('08/05', '(Sex)', '12:15'), createTreino('08/05', '(Sex)', '17:40'),
+
+            createEspecial('09/05', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('09/05', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('09/05', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('10/05', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (11-17)
+            createTreino('11/05', '(Seg)', '06:00'), createTreino('11/05', '(Seg)', '07:30'), createTreino('11/05', '(Seg)', '12:15'), createTreino('11/05', '(Seg)', '17:40'),
+            createTreino('12/05', '(Ter)', '06:00'), createTreino('12/05', '(Ter)', '07:30'), createTreino('12/05', '(Ter)', '17:40'),
+            createTreino('13/05', '(Qua)', '06:00'), createTreino('13/05', '(Qua)', '07:30'), createTreino('13/05', '(Qua)', '12:15'), createTreino('13/05', '(Qua)', '17:40'),
+            createTreino('14/05', '(Qui)', '06:00'), createTreino('14/05', '(Qui)', '07:30'), createTreino('14/05', '(Qui)', '17:40'),
+            createTreino('15/05', '(Sex)', '06:00'), createTreino('15/05', '(Sex)', '07:30'), createTreino('15/05', '(Sex)', '12:15'), createTreino('15/05', '(Sex)', '17:40'),
+
+            createEspecial('16/05', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('16/05', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('16/05', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('17/05', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (18-24)
+            createTreino('18/05', '(Seg)', '06:00'), createTreino('18/05', '(Seg)', '07:30'), createTreino('18/05', '(Seg)', '12:15'), createTreino('18/05', '(Seg)', '17:40'),
+            createTreino('19/05', '(Ter)', '06:00'), createTreino('19/05', '(Ter)', '07:30'), createTreino('19/05', '(Ter)', '17:40'),
+            createTreino('20/05', '(Qua)', '06:00'), createTreino('20/05', '(Qua)', '07:30'), createTreino('20/05', '(Qua)', '12:15'), createTreino('20/05', '(Qua)', '17:40'),
+            createTreino('21/05', '(Qui)', '06:00'), createTreino('21/05', '(Qui)', '07:30'), createTreino('21/05', '(Qui)', '17:40'),
+            createTreino('22/05', '(Sex)', '06:00'), createTreino('22/05', '(Sex)', '07:30'), createTreino('22/05', '(Sex)', '12:15'), createTreino('22/05', '(Sex)', '17:40'),
+
+            createEspecial('23/05', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('23/05', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('23/05', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('24/05', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (25-31)
+            createTreino('25/05', '(Seg)', '06:00'), createTreino('25/05', '(Seg)', '07:30'), createTreino('25/05', '(Seg)', '12:15'), createTreino('25/05', '(Seg)', '17:40'),
+            createTreino('26/05', '(Ter)', '06:00'), createTreino('26/05', '(Ter)', '07:30'), createTreino('26/05', '(Ter)', '17:40'),
+            createTreino('27/05', '(Qua)', '06:00'), createTreino('27/05', '(Qua)', '07:30'), createTreino('27/05', '(Qua)', '12:15'), createTreino('27/05', '(Qua)', '17:40'),
+            createTreino('28/05', '(Qui)', '06:00'), createTreino('28/05', '(Qui)', '07:30'), createTreino('28/05', '(Qui)', '17:40'),
+            createTreino('29/05', '(Sex)', '06:00'), createTreino('29/05', '(Sex)', '07:30'), createTreino('29/05', '(Sex)', '12:15'), createTreino('29/05', '(Sex)', '17:40'),
+
+            createEspecial('30/05', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('30/05', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('31/05', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
         ]
     },
     {
         mes: 'Junho 2026',
         year: 2026,
         eventos: [
-            { dataStr: '01/06', diaSemana: '(Seg)', horario: '17:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '02/06', diaSemana: '(Ter)', horario: '18:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '06/06', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '06/06', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '06/06', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '07/06', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '13/06', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '13/06', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '13/06', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '14/06', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '20/06', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '20/06', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '20/06', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '21/06', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '27/06', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '27/06', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '27/06', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '28/06', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '29/06', diaSemana: '(Seg)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
-            { dataStr: '30/06', diaSemana: '(Ter)', horario: '18:10', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia - CPP Extreme.' },
+            createEspecial('01/06', '(Seg)', '17:30', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('02/06', '(Ter)', '18:30', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('29/06', '(Seg)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('30/06', '(Ter)', '18:10', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-07)
+            createTreino('01/06', '(Seg)', '06:00'), createTreino('01/06', '(Seg)', '07:30'), createTreino('01/06', '(Seg)', '12:15'), createTreino('01/06', '(Seg)', '17:40'),
+            createTreino('02/06', '(Ter)', '06:00'), createTreino('02/06', '(Ter)', '07:30'), createTreino('02/06', '(Ter)', '17:40'),
+            createTreino('03/06', '(Qua)', '06:00'), createTreino('03/06', '(Qua)', '07:30'), createTreino('03/06', '(Qua)', '12:15'), createTreino('03/06', '(Qua)', '17:40'),
+            createTreino('04/06', '(Qui)', '06:00'), createTreino('04/06', '(Qui)', '07:30'), createTreino('04/06', '(Qui)', '17:40'), // Corpus Christi com treino
+            createTreino('05/06', '(Sex)', '06:00'), createTreino('05/06', '(Sex)', '07:30'), createTreino('05/06', '(Sex)', '12:15'), createTreino('05/06', '(Sex)', '17:40'),
+
+            createEspecial('06/06', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('06/06', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('06/06', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('07/06', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (08-14)
+            createTreino('08/06', '(Seg)', '06:00'), createTreino('08/06', '(Seg)', '07:30'), createTreino('08/06', '(Seg)', '12:15'), createTreino('08/06', '(Seg)', '17:40'),
+            createTreino('09/06', '(Ter)', '06:00'), createTreino('09/06', '(Ter)', '07:30'), createTreino('09/06', '(Ter)', '17:40'),
+            createTreino('10/06', '(Qua)', '06:00'), createTreino('10/06', '(Qua)', '07:30'), createTreino('10/06', '(Qua)', '12:15'), createTreino('10/06', '(Qua)', '17:40'),
+            createTreino('11/06', '(Qui)', '06:00'), createTreino('11/06', '(Qui)', '07:30'), createTreino('11/06', '(Qui)', '17:40'),
+            createTreino('12/06', '(Sex)', '06:00'), createTreino('12/06', '(Sex)', '07:30'), createTreino('12/06', '(Sex)', '12:15'), createTreino('12/06', '(Sex)', '17:40'),
+
+            createEspecial('13/06', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('13/06', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('13/06', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('14/06', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (15-21)
+            createTreino('15/06', '(Seg)', '06:00'), createTreino('15/06', '(Seg)', '07:30'), createTreino('15/06', '(Seg)', '12:15'), createTreino('15/06', '(Seg)', '17:40'),
+            createTreino('16/06', '(Ter)', '06:00'), createTreino('16/06', '(Ter)', '07:30'), createTreino('16/06', '(Ter)', '17:40'),
+            createTreino('17/06', '(Qua)', '06:00'), createTreino('17/06', '(Qua)', '07:30'), createTreino('17/06', '(Qua)', '12:15'), createTreino('17/06', '(Qua)', '17:40'),
+            createTreino('18/06', '(Qui)', '06:00'), createTreino('18/06', '(Qui)', '07:30'), createTreino('18/06', '(Qui)', '17:40'),
+            createTreino('19/06', '(Sex)', '06:00'), createTreino('19/06', '(Sex)', '07:30'), createTreino('19/06', '(Sex)', '12:15'), createTreino('19/06', '(Sex)', '17:40'),
+
+            createEspecial('20/06', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('20/06', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('20/06', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('21/06', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (22-28)
+            createTreino('22/06', '(Seg)', '06:00'), createTreino('22/06', '(Seg)', '07:30'), createTreino('22/06', '(Seg)', '12:15'), createTreino('22/06', '(Seg)', '17:40'),
+            createTreino('23/06', '(Ter)', '06:00'), createTreino('23/06', '(Ter)', '07:30'), createTreino('23/06', '(Ter)', '17:40'),
+            createTreino('24/06', '(Qua)', '06:00'), createTreino('24/06', '(Qua)', '07:30'), createTreino('24/06', '(Qua)', '12:15'), createTreino('24/06', '(Qua)', '17:40'),
+            createTreino('25/06', '(Qui)', '06:00'), createTreino('25/06', '(Qui)', '07:30'), createTreino('25/06', '(Qui)', '17:40'),
+            createTreino('26/06', '(Sex)', '06:00'), createTreino('26/06', '(Sex)', '07:30'), createTreino('26/06', '(Sex)', '12:15'), createTreino('26/06', '(Sex)', '17:40'),
+
+            createEspecial('27/06', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('27/06', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('27/06', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('28/06', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (29-30)
+            createTreino('29/06', '(Seg)', '06:00'), createTreino('29/06', '(Seg)', '07:30'), createTreino('29/06', '(Seg)', '12:15'), createTreino('29/06', '(Seg)', '17:40'),
+            createTreino('30/06', '(Ter)', '06:00'), createTreino('30/06', '(Ter)', '07:30'), createTreino('30/06', '(Ter)', '17:40'),
         ]
     },
     {
         mes: 'Julho 2026',
         year: 2026,
         eventos: [
-            { dataStr: '04/07', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '04/07', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '04/07', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '05/07', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '11/07', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '11/07', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '11/07', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '12/07', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '17/07', diaSemana: '(Sex)', horario: '14:00', atividade: 'Volta Ilha de Vix 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Expedição Volta à Ilha de Vitória.' },
-            { dataStr: '18/07', diaSemana: '(Sáb)', horario: '08:00', atividade: 'Volta Ilha de Vix 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Segundo dia da expedição em Vitória.' },
-            { dataStr: '19/07', diaSemana: '(Dom)', horario: '08:00', atividade: 'Volta Ilha de Vix 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Encerramento da expedição.' },
-            { dataStr: '18/07', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol em BSB.' },
-            { dataStr: '18/07', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante em BSB.' },
-            { dataStr: '18/07', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour em BSB.' },
-            { dataStr: '19/07', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax em BSB.' },
-            { dataStr: '25/07', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '25/07', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '25/07', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '26/07', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '29/07', diaSemana: '(Qua)', horario: '16:00', atividade: 'Remada da Lua Cheia - CPP Extreme 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia.' },
-            { dataStr: '29/07', diaSemana: '(Qua)', horario: '17:40', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia.' },
-            { dataStr: '30/07', diaSemana: '(Qui)', horario: '17:50', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia.' },
-            { dataStr: '31/07', diaSemana: '(Sex)', horario: '18:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia.' },
+            createEspecial('17/07', '(Sex)', '14:00', 'Volta Ilha de Vix 🏝️', 'Viagem', '/cpplua.jpeg', 'Expedição em Vitória.'),
+            createEspecial('18/07', '(Sáb)', '08:00', 'Volta Ilha de Vix 🏝️', 'Viagem', '/cpplua.jpeg', 'Expedição em Vitória.'),
+            createEspecial('19/07', '(Dom)', '08:00', 'Volta Ilha de Vix 🏝️', 'Viagem', '/cpplua.jpeg', 'Expedição em Vitória.'),
+            createEspecial('29/07', '(Qua)', '16:00', 'Remada da Lua Cheia - CPP Extreme 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('29/07', '(Qua)', '17:40', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('30/07', '(Qui)', '17:50', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('31/07', '(Sex)', '18:30', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-05)
+            createTreino('01/07', '(Qua)', '06:00'), createTreino('01/07', '(Qua)', '07:30'), createTreino('01/07', '(Qua)', '12:15'), createTreino('01/07', '(Qua)', '17:40'),
+            createTreino('02/07', '(Qui)', '06:00'), createTreino('02/07', '(Qui)', '07:30'), createTreino('02/07', '(Qui)', '17:40'),
+            createTreino('03/07', '(Sex)', '06:00'), createTreino('03/07', '(Sex)', '07:30'), createTreino('03/07', '(Sex)', '12:15'), createTreino('03/07', '(Sex)', '17:40'),
+            createEspecial('04/07', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('04/07', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('04/07', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('05/07', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (06-12)
+            createTreino('06/07', '(Seg)', '06:00'), createTreino('06/07', '(Seg)', '07:30'), createTreino('06/07', '(Seg)', '12:15'), createTreino('06/07', '(Seg)', '17:40'),
+            createTreino('07/07', '(Ter)', '06:00'), createTreino('07/07', '(Ter)', '07:30'), createTreino('07/07', '(Ter)', '17:40'),
+            createTreino('08/07', '(Qua)', '06:00'), createTreino('08/07', '(Qua)', '07:30'), createTreino('08/07', '(Qua)', '12:15'), createTreino('08/07', '(Qua)', '17:40'),
+            createTreino('09/07', '(Qui)', '06:00'), createTreino('09/07', '(Qui)', '07:30'), createTreino('09/07', '(Qui)', '17:40'),
+            createTreino('10/07', '(Sex)', '06:00'), createTreino('10/07', '(Sex)', '07:30'), createTreino('10/07', '(Sex)', '12:15'), createTreino('10/07', '(Sex)', '17:40'),
+            createEspecial('11/07', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('11/07', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('11/07', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('12/07', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (13-19)
+            createTreino('13/07', '(Seg)', '06:00'), createTreino('13/07', '(Seg)', '07:30'), createTreino('13/07', '(Seg)', '12:15'), createTreino('13/07', '(Seg)', '17:40'),
+            createTreino('14/07', '(Ter)', '06:00'), createTreino('14/07', '(Ter)', '07:30'), createTreino('14/07', '(Ter)', '17:40'),
+            createTreino('15/07', '(Qua)', '06:00'), createTreino('15/07', '(Qua)', '07:30'), createTreino('15/07', '(Qua)', '12:15'), createTreino('15/07', '(Qua)', '17:40'),
+            createTreino('16/07', '(Qui)', '06:00'), createTreino('16/07', '(Qui)', '07:30'), createTreino('16/07', '(Qui)', '17:40'),
+            // Dia 17 tem viagem, mas pode ter treino em BSB. Mantendo normal.
+            createTreino('17/07', '(Sex)', '06:00'), createTreino('17/07', '(Sex)', '07:30'), createTreino('17/07', '(Sex)', '12:15'), createTreino('17/07', '(Sex)', '17:40'),
+            createEspecial('18/07', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('18/07', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('18/07', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('19/07', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (20-26)
+            createTreino('20/07', '(Seg)', '06:00'), createTreino('20/07', '(Seg)', '07:30'), createTreino('20/07', '(Seg)', '12:15'), createTreino('20/07', '(Seg)', '17:40'),
+            createTreino('21/07', '(Ter)', '06:00'), createTreino('21/07', '(Ter)', '07:30'), createTreino('21/07', '(Ter)', '17:40'),
+            createTreino('22/07', '(Qua)', '06:00'), createTreino('22/07', '(Qua)', '07:30'), createTreino('22/07', '(Qua)', '12:15'), createTreino('22/07', '(Qua)', '17:40'),
+            createTreino('23/07', '(Qui)', '06:00'), createTreino('23/07', '(Qui)', '07:30'), createTreino('23/07', '(Qui)', '17:40'),
+            createTreino('24/07', '(Sex)', '06:00'), createTreino('24/07', '(Sex)', '07:30'), createTreino('24/07', '(Sex)', '12:15'), createTreino('24/07', '(Sex)', '17:40'),
+            createEspecial('25/07', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('25/07', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('25/07', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('26/07', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (27-31)
+            createTreino('27/07', '(Seg)', '06:00'), createTreino('27/07', '(Seg)', '07:30'), createTreino('27/07', '(Seg)', '12:15'), createTreino('27/07', '(Seg)', '17:40'),
+            createTreino('28/07', '(Ter)', '06:00'), createTreino('28/07', '(Ter)', '07:30'), createTreino('28/07', '(Ter)', '17:40'),
+            createTreino('29/07', '(Qua)', '06:00'), createTreino('29/07', '(Qua)', '07:30'), createTreino('29/07', '(Qua)', '12:15'), createTreino('29/07', '(Qua)', '17:40'),
+            createTreino('30/07', '(Qui)', '06:00'), createTreino('30/07', '(Qui)', '07:30'), createTreino('30/07', '(Qui)', '17:40'),
+            createTreino('31/07', '(Sex)', '06:00'), createTreino('31/07', '(Sex)', '07:30'), createTreino('31/07', '(Sex)', '12:15'), createTreino('31/07', '(Sex)', '17:40'),
         ]
     },
     {
         mes: 'Agosto 2026',
         year: 2026,
         eventos: [
-            { dataStr: '01/08', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '01/08', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '01/08', diaSemana: '(Sáb)', horario: '17:10', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '02/08', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '08/08', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '08/08', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '08/08', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '09/08', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '15/08', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '15/08', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '15/08', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '16/08', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '22/08', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '22/08', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '22/08', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '23/08', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '27/08', diaSemana: '(Qui)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '28/08', diaSemana: '(Sex)', horario: '17:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '29/08', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '29/08', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '29/08', diaSemana: '(Sáb)', horario: '18:10', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '30/08', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            createEspecial('27/08', '(Qui)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('28/08', '(Sex)', '17:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('29/08', '(Sáb)', '18:10', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-02)
+            createEspecial('01/08', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('01/08', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('01/08', '(Sáb)', '17:10', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('02/08', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (03-09)
+            createTreino('03/08', '(Seg)', '06:00'), createTreino('03/08', '(Seg)', '07:30'), createTreino('03/08', '(Seg)', '12:15'), createTreino('03/08', '(Seg)', '17:40'),
+            createTreino('04/08', '(Ter)', '06:00'), createTreino('04/08', '(Ter)', '07:30'), createTreino('04/08', '(Ter)', '17:40'),
+            createTreino('05/08', '(Qua)', '06:00'), createTreino('05/08', '(Qua)', '07:30'), createTreino('05/08', '(Qua)', '12:15'), createTreino('05/08', '(Qua)', '17:40'),
+            createTreino('06/08', '(Qui)', '06:00'), createTreino('06/08', '(Qui)', '07:30'), createTreino('06/08', '(Qui)', '17:40'),
+            createTreino('07/08', '(Sex)', '06:00'), createTreino('07/08', '(Sex)', '07:30'), createTreino('07/08', '(Sex)', '12:15'), createTreino('07/08', '(Sex)', '17:40'),
+            createEspecial('08/08', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('08/08', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('08/08', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('09/08', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (10-16)
+            createTreino('10/08', '(Seg)', '06:00'), createTreino('10/08', '(Seg)', '07:30'), createTreino('10/08', '(Seg)', '12:15'), createTreino('10/08', '(Seg)', '17:40'),
+            createTreino('11/08', '(Ter)', '06:00'), createTreino('11/08', '(Ter)', '07:30'), createTreino('11/08', '(Ter)', '17:40'),
+            createTreino('12/08', '(Qua)', '06:00'), createTreino('12/08', '(Qua)', '07:30'), createTreino('12/08', '(Qua)', '12:15'), createTreino('12/08', '(Qua)', '17:40'),
+            createTreino('13/08', '(Qui)', '06:00'), createTreino('13/08', '(Qui)', '07:30'), createTreino('13/08', '(Qui)', '17:40'),
+            createTreino('14/08', '(Sex)', '06:00'), createTreino('14/08', '(Sex)', '07:30'), createTreino('14/08', '(Sex)', '12:15'), createTreino('14/08', '(Sex)', '17:40'),
+            createEspecial('15/08', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('15/08', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('15/08', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('16/08', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (17-23)
+            createTreino('17/08', '(Seg)', '06:00'), createTreino('17/08', '(Seg)', '07:30'), createTreino('17/08', '(Seg)', '12:15'), createTreino('17/08', '(Seg)', '17:40'),
+            createTreino('18/08', '(Ter)', '06:00'), createTreino('18/08', '(Ter)', '07:30'), createTreino('18/08', '(Ter)', '17:40'),
+            createTreino('19/08', '(Qua)', '06:00'), createTreino('19/08', '(Qua)', '07:30'), createTreino('19/08', '(Qua)', '12:15'), createTreino('19/08', '(Qua)', '17:40'),
+            createTreino('20/08', '(Qui)', '06:00'), createTreino('20/08', '(Qui)', '07:30'), createTreino('20/08', '(Qui)', '17:40'),
+            createTreino('21/08', '(Sex)', '06:00'), createTreino('21/08', '(Sex)', '07:30'), createTreino('21/08', '(Sex)', '12:15'), createTreino('21/08', '(Sex)', '17:40'),
+            createEspecial('22/08', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('22/08', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('22/08', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('23/08', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (24-31)
+            createTreino('24/08', '(Seg)', '06:00'), createTreino('24/08', '(Seg)', '07:30'), createTreino('24/08', '(Seg)', '12:15'), createTreino('24/08', '(Seg)', '17:40'),
+            createTreino('25/08', '(Ter)', '06:00'), createTreino('25/08', '(Ter)', '07:30'), createTreino('25/08', '(Ter)', '17:40'),
+            createTreino('26/08', '(Qua)', '06:00'), createTreino('26/08', '(Qua)', '07:30'), createTreino('26/08', '(Qua)', '12:15'), createTreino('26/08', '(Qua)', '17:40'),
+            createTreino('27/08', '(Qui)', '06:00'), createTreino('27/08', '(Qui)', '07:30'), createTreino('27/08', '(Qui)', '17:40'),
+            createTreino('28/08', '(Sex)', '06:00'), createTreino('28/08', '(Sex)', '07:30'), createTreino('28/08', '(Sex)', '12:15'), createTreino('28/08', '(Sex)', '17:40'),
+            createEspecial('29/08', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('29/08', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('30/08', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+            createTreino('31/08', '(Seg)', '06:00'), createTreino('31/08', '(Seg)', '07:30'), createTreino('31/08', '(Seg)', '12:15'), createTreino('31/08', '(Seg)', '17:40'),
         ]
     },
     {
         mes: 'Setembro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '05/09', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '05/09', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '05/09', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '06/09', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '12/09', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '12/09', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '12/09', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '13/09', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '19/09', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '19/09', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '19/09', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '20/09', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '26/09', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '26/09', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '26/09', diaSemana: '(Sáb)', horario: '17:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '27/09', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '27/09', diaSemana: '(Dom)', horario: '18:00', atividade: 'Remada da Lua Cheia - CPP Extreme 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
-            { dataStr: '28/09', diaSemana: '(Seg)', horario: '19:00', atividade: 'Remada da Lua Cheia - CPP Extreme 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada especial de Lua Cheia.' },
+            createEspecial('26/09', '(Sáb)', '17:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('27/09', '(Dom)', '18:00', 'Remada da Lua Cheia - CPP Extreme 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('28/09', '(Seg)', '19:00', 'Remada da Lua Cheia - CPP Extreme 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-06)
+            createTreino('01/09', '(Ter)', '06:00'), createTreino('01/09', '(Ter)', '07:30'), createTreino('01/09', '(Ter)', '17:40'),
+            createTreino('02/09', '(Qua)', '06:00'), createTreino('02/09', '(Qua)', '07:30'), createTreino('02/09', '(Qua)', '12:15'), createTreino('02/09', '(Qua)', '17:40'),
+            createTreino('03/09', '(Qui)', '06:00'), createTreino('03/09', '(Qui)', '07:30'), createTreino('03/09', '(Qui)', '17:40'),
+            createTreino('04/09', '(Sex)', '06:00'), createTreino('04/09', '(Sex)', '07:30'), createTreino('04/09', '(Sex)', '12:15'), createTreino('04/09', '(Sex)', '17:40'),
+            createEspecial('05/09', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('05/09', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('05/09', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('06/09', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (07-13)
+            createTreino('07/09', '(Seg)', '06:00'), createTreino('07/09', '(Seg)', '07:30'), createTreino('07/09', '(Seg)', '12:15'), createTreino('07/09', '(Seg)', '17:40'), // Feriado com treino
+            createTreino('08/09', '(Ter)', '06:00'), createTreino('08/09', '(Ter)', '07:30'), createTreino('08/09', '(Ter)', '17:40'),
+            createTreino('09/09', '(Qua)', '06:00'), createTreino('09/09', '(Qua)', '07:30'), createTreino('09/09', '(Qua)', '12:15'), createTreino('09/09', '(Qua)', '17:40'),
+            createTreino('10/09', '(Qui)', '06:00'), createTreino('10/09', '(Qui)', '07:30'), createTreino('10/09', '(Qui)', '17:40'),
+            createTreino('11/09', '(Sex)', '06:00'), createTreino('11/09', '(Sex)', '07:30'), createTreino('11/09', '(Sex)', '12:15'), createTreino('11/09', '(Sex)', '17:40'),
+            createEspecial('12/09', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('12/09', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('12/09', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('13/09', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (14-20)
+            createTreino('14/09', '(Seg)', '06:00'), createTreino('14/09', '(Seg)', '07:30'), createTreino('14/09', '(Seg)', '12:15'), createTreino('14/09', '(Seg)', '17:40'),
+            createTreino('15/09', '(Ter)', '06:00'), createTreino('15/09', '(Ter)', '07:30'), createTreino('15/09', '(Ter)', '17:40'),
+            createTreino('16/09', '(Qua)', '06:00'), createTreino('16/09', '(Qua)', '07:30'), createTreino('16/09', '(Qua)', '12:15'), createTreino('16/09', '(Qua)', '17:40'),
+            createTreino('17/09', '(Qui)', '06:00'), createTreino('17/09', '(Qui)', '07:30'), createTreino('17/09', '(Qui)', '17:40'),
+            createTreino('18/09', '(Sex)', '06:00'), createTreino('18/09', '(Sex)', '07:30'), createTreino('18/09', '(Sex)', '12:15'), createTreino('18/09', '(Sex)', '17:40'),
+            createEspecial('19/09', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('19/09', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('19/09', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('20/09', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (21-27)
+            createTreino('21/09', '(Seg)', '06:00'), createTreino('21/09', '(Seg)', '07:30'), createTreino('21/09', '(Seg)', '12:15'), createTreino('21/09', '(Seg)', '17:40'),
+            createTreino('22/09', '(Ter)', '06:00'), createTreino('22/09', '(Ter)', '07:30'), createTreino('22/09', '(Ter)', '17:40'),
+            createTreino('23/09', '(Qua)', '06:00'), createTreino('23/09', '(Qua)', '07:30'), createTreino('23/09', '(Qua)', '12:15'), createTreino('23/09', '(Qua)', '17:40'),
+            createTreino('24/09', '(Qui)', '06:00'), createTreino('24/09', '(Qui)', '07:30'), createTreino('24/09', '(Qui)', '17:40'),
+            createTreino('25/09', '(Sex)', '06:00'), createTreino('25/09', '(Sex)', '07:30'), createTreino('25/09', '(Sex)', '12:15'), createTreino('25/09', '(Sex)', '17:40'),
+            createEspecial('26/09', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('26/09', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('26/09', '(Sáb)', '17:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('27/09', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (28-30)
+            createTreino('28/09', '(Seg)', '06:00'), createTreino('28/09', '(Seg)', '07:30'), createTreino('28/09', '(Seg)', '12:15'), createTreino('28/09', '(Seg)', '17:40'),
+            createTreino('29/09', '(Ter)', '06:00'), createTreino('29/09', '(Ter)', '07:30'), createTreino('29/09', '(Ter)', '17:40'),
+            createTreino('30/09', '(Qua)', '06:00'), createTreino('30/09', '(Qua)', '07:30'), createTreino('30/09', '(Qua)', '12:15'), createTreino('30/09', '(Qua)', '17:40'),
         ]
     },
     {
         mes: 'Outubro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '03/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '04/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '10/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '11/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '17/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '18/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '24/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '25/10', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '26/10', diaSemana: '(Seg)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '27/10', diaSemana: '(Ter)', horario: '17:30', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '27/10', diaSemana: '(Ter)', horario: '19:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '31/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            createEspecial('26/10', '(Seg)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('27/10', '(Ter)', '17:30', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('27/10', '(Ter)', '19:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01-04)
+            createTreino('01/10', '(Qui)', '06:00'), createTreino('01/10', '(Qui)', '07:30'), createTreino('01/10', '(Qui)', '17:40'),
+            createTreino('02/10', '(Sex)', '06:00'), createTreino('02/10', '(Sex)', '07:30'), createTreino('02/10', '(Sex)', '12:15'), createTreino('02/10', '(Sex)', '17:40'),
+            createEspecial('03/10', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('03/10', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('03/10', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('04/10', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (05-11)
+            createTreino('05/10', '(Seg)', '06:00'), createTreino('05/10', '(Seg)', '07:30'), createTreino('05/10', '(Seg)', '12:15'), createTreino('05/10', '(Seg)', '17:40'),
+            createTreino('06/10', '(Ter)', '06:00'), createTreino('06/10', '(Ter)', '07:30'), createTreino('06/10', '(Ter)', '17:40'),
+            createTreino('07/10', '(Qua)', '06:00'), createTreino('07/10', '(Qua)', '07:30'), createTreino('07/10', '(Qua)', '12:15'), createTreino('07/10', '(Qua)', '17:40'),
+            createTreino('08/10', '(Qui)', '06:00'), createTreino('08/10', '(Qui)', '07:30'), createTreino('08/10', '(Qui)', '17:40'),
+            createTreino('09/10', '(Sex)', '06:00'), createTreino('09/10', '(Sex)', '07:30'), createTreino('09/10', '(Sex)', '12:15'), createTreino('09/10', '(Sex)', '17:40'),
+            createEspecial('10/10', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('10/10', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('10/10', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('11/10', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (12-18)
+            createTreino('12/10', '(Seg)', '06:00'), createTreino('12/10', '(Seg)', '07:30'), createTreino('12/10', '(Seg)', '12:15'), createTreino('12/10', '(Seg)', '17:40'), // Feriado com treino
+            createTreino('13/10', '(Ter)', '06:00'), createTreino('13/10', '(Ter)', '07:30'), createTreino('13/10', '(Ter)', '17:40'),
+            createTreino('14/10', '(Qua)', '06:00'), createTreino('14/10', '(Qua)', '07:30'), createTreino('14/10', '(Qua)', '12:15'), createTreino('14/10', '(Qua)', '17:40'),
+            createTreino('15/10', '(Qui)', '06:00'), createTreino('15/10', '(Qui)', '07:30'), createTreino('15/10', '(Qui)', '17:40'),
+            createTreino('16/10', '(Sex)', '06:00'), createTreino('16/10', '(Sex)', '07:30'), createTreino('16/10', '(Sex)', '12:15'), createTreino('16/10', '(Sex)', '17:40'),
+            createEspecial('17/10', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('17/10', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('17/10', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('18/10', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (19-25)
+            createTreino('19/10', '(Seg)', '06:00'), createTreino('19/10', '(Seg)', '07:30'), createTreino('19/10', '(Seg)', '12:15'), createTreino('19/10', '(Seg)', '17:40'),
+            createTreino('20/10', '(Ter)', '06:00'), createTreino('20/10', '(Ter)', '07:30'), createTreino('20/10', '(Ter)', '17:40'),
+            createTreino('21/10', '(Qua)', '06:00'), createTreino('21/10', '(Qua)', '07:30'), createTreino('21/10', '(Qua)', '12:15'), createTreino('21/10', '(Qua)', '17:40'),
+            createTreino('22/10', '(Qui)', '06:00'), createTreino('22/10', '(Qui)', '07:30'), createTreino('22/10', '(Qui)', '17:40'),
+            createTreino('23/10', '(Sex)', '06:00'), createTreino('23/10', '(Sex)', '07:30'), createTreino('23/10', '(Sex)', '12:15'), createTreino('23/10', '(Sex)', '17:40'),
+            createEspecial('24/10', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('24/10', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('24/10', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('25/10', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (26-31)
+            createTreino('26/10', '(Seg)', '06:00'), createTreino('26/10', '(Seg)', '07:30'), createTreino('26/10', '(Seg)', '12:15'), createTreino('26/10', '(Seg)', '17:40'),
+            createTreino('27/10', '(Ter)', '06:00'), createTreino('27/10', '(Ter)', '07:30'), createTreino('27/10', '(Ter)', '17:40'),
+            createTreino('28/10', '(Qua)', '06:00'), createTreino('28/10', '(Qua)', '07:30'), createTreino('28/10', '(Qua)', '12:15'), createTreino('28/10', '(Qua)', '17:40'),
+            createTreino('29/10', '(Qui)', '06:00'), createTreino('29/10', '(Qui)', '07:30'), createTreino('29/10', '(Qui)', '17:40'),
+            createTreino('30/10', '(Sex)', '06:00'), createTreino('30/10', '(Sex)', '07:30'), createTreino('30/10', '(Sex)', '12:15'), createTreino('30/10', '(Sex)', '17:40'),
+            createEspecial('31/10', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('31/10', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('31/10', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
         ]
     },
     {
         mes: 'Novembro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '08/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '15/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '22/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '24/11', diaSemana: '(Ter)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '24/11', diaSemana: '(Ter)', horario: '18:50', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '25/11', diaSemana: '(Qua)', horario: '20:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '26/11', diaSemana: '(Qui)', horario: '20:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
-            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '29/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            createEspecial('24/11', '(Ter)', '16:20', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('24/11', '(Ter)', '18:50', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('25/11', '(Qua)', '20:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+            createEspecial('26/11', '(Qui)', '20:00', 'Remada da Lua Cheia 🌕', 'Especial', '/lualua.jpg', ''),
+
+            // Semana 1 (01)
+            createEspecial('01/11', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (02-08)
+            createTreino('02/11', '(Seg)', '06:00'), createTreino('02/11', '(Seg)', '07:30'), createTreino('02/11', '(Seg)', '12:15'), createTreino('02/11', '(Seg)', '17:40'), // Finados com treino
+            createTreino('03/11', '(Ter)', '06:00'), createTreino('03/11', '(Ter)', '07:30'), createTreino('03/11', '(Ter)', '17:40'),
+            createTreino('04/11', '(Qua)', '06:00'), createTreino('04/11', '(Qua)', '07:30'), createTreino('04/11', '(Qua)', '12:15'), createTreino('04/11', '(Qua)', '17:40'),
+            createTreino('05/11', '(Qui)', '06:00'), createTreino('05/11', '(Qui)', '07:30'), createTreino('05/11', '(Qui)', '17:40'),
+            createTreino('06/11', '(Sex)', '06:00'), createTreino('06/11', '(Sex)', '07:30'), createTreino('06/11', '(Sex)', '12:15'), createTreino('06/11', '(Sex)', '17:40'),
+            createEspecial('07/11', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('07/11', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('07/11', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('08/11', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 3 (09-15)
+            createTreino('09/11', '(Seg)', '06:00'), createTreino('09/11', '(Seg)', '07:30'), createTreino('09/11', '(Seg)', '12:15'), createTreino('09/11', '(Seg)', '17:40'),
+            createTreino('10/11', '(Ter)', '06:00'), createTreino('10/11', '(Ter)', '07:30'), createTreino('10/11', '(Ter)', '17:40'),
+            createTreino('11/11', '(Qua)', '06:00'), createTreino('11/11', '(Qua)', '07:30'), createTreino('11/11', '(Qua)', '12:15'), createTreino('11/11', '(Qua)', '17:40'),
+            createTreino('12/11', '(Qui)', '06:00'), createTreino('12/11', '(Qui)', '07:30'), createTreino('12/11', '(Qui)', '17:40'),
+            createTreino('13/11', '(Sex)', '06:00'), createTreino('13/11', '(Sex)', '07:30'), createTreino('13/11', '(Sex)', '12:15'), createTreino('13/11', '(Sex)', '17:40'),
+            createEspecial('14/11', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('14/11', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('14/11', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('15/11', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (16-22)
+            createTreino('16/11', '(Seg)', '06:00'), createTreino('16/11', '(Seg)', '07:30'), createTreino('16/11', '(Seg)', '12:15'), createTreino('16/11', '(Seg)', '17:40'),
+            createTreino('17/11', '(Ter)', '06:00'), createTreino('17/11', '(Ter)', '07:30'), createTreino('17/11', '(Ter)', '17:40'),
+            createTreino('18/11', '(Qua)', '06:00'), createTreino('18/11', '(Qua)', '07:30'), createTreino('18/11', '(Qua)', '12:15'), createTreino('18/11', '(Qua)', '17:40'),
+            createTreino('19/11', '(Qui)', '06:00'), createTreino('19/11', '(Qui)', '07:30'), createTreino('19/11', '(Qui)', '17:40'),
+            createTreino('20/11', '(Sex)', '06:00'), createTreino('20/11', '(Sex)', '07:30'), createTreino('20/11', '(Sex)', '12:15'), createTreino('20/11', '(Sex)', '17:40'),
+            createEspecial('21/11', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('21/11', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('21/11', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('22/11', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 5 (23-30)
+            createTreino('23/11', '(Seg)', '06:00'), createTreino('23/11', '(Seg)', '07:30'), createTreino('23/11', '(Seg)', '12:15'), createTreino('23/11', '(Seg)', '17:40'),
+            createTreino('24/11', '(Ter)', '06:00'), createTreino('24/11', '(Ter)', '07:30'), createTreino('24/11', '(Ter)', '17:40'),
+            createTreino('25/11', '(Qua)', '06:00'), createTreino('25/11', '(Qua)', '07:30'), createTreino('25/11', '(Qua)', '12:15'), createTreino('25/11', '(Qua)', '17:40'),
+            createTreino('26/11', '(Qui)', '06:00'), createTreino('26/11', '(Qui)', '07:30'), createTreino('26/11', '(Qui)', '17:40'),
+            createTreino('27/11', '(Sex)', '06:00'), createTreino('27/11', '(Sex)', '07:30'), createTreino('27/11', '(Sex)', '12:15'), createTreino('27/11', '(Sex)', '17:40'),
+            createEspecial('28/11', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('28/11', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('28/11', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('29/11', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+            createTreino('30/11', '(Seg)', '06:00'), createTreino('30/11', '(Seg)', '07:30'), createTreino('30/11', '(Seg)', '12:15'), createTreino('30/11', '(Seg)', '17:40'),
         ]
     },
     {
         mes: 'Dezembro 2026',
         year: 2026,
         eventos: [
-            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '06/12', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
-            { dataStr: '11/12', diaSemana: '(Sex)', horario: '10:00', atividade: 'Volta Ilhabela 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Expedição Volta à Ilha de Ilhabela.' },
-            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '13/12', diaSemana: '(Dom)', horario: '10:00', atividade: 'Volta Ilhabela - Chegada 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Chegada da expedição.' },
-            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
-            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
-            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
-            { dataStr: '20/12', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            createEspecial('11/12', '(Sex)', '10:00', 'Volta Ilhabela 🏝️', 'Viagem', '/cpplua.jpeg', 'Expedição.'),
+            createEspecial('13/12', '(Dom)', '10:00', 'Volta Ilhabela - Chegada 🏝️', 'Viagem', '/cpplua.jpeg', ''),
+
+            // Semana 1 (01-06)
+            createTreino('01/12', '(Ter)', '06:00'), createTreino('01/12', '(Ter)', '07:30'), createTreino('01/12', '(Ter)', '17:40'),
+            createTreino('02/12', '(Qua)', '06:00'), createTreino('02/12', '(Qua)', '07:30'), createTreino('02/12', '(Qua)', '12:15'), createTreino('02/12', '(Qua)', '17:40'),
+            createTreino('03/12', '(Qui)', '06:00'), createTreino('03/12', '(Qui)', '07:30'), createTreino('03/12', '(Qui)', '17:40'),
+            createTreino('04/12', '(Sex)', '06:00'), createTreino('04/12', '(Sex)', '07:30'), createTreino('04/12', '(Sex)', '12:15'), createTreino('04/12', '(Sex)', '17:40'),
+            createEspecial('05/12', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('05/12', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('05/12', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('06/12', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 2 (07-13)
+            createTreino('07/12', '(Seg)', '06:00'), createTreino('07/12', '(Seg)', '07:30'), createTreino('07/12', '(Seg)', '12:15'), createTreino('07/12', '(Seg)', '17:40'),
+            createTreino('08/12', '(Ter)', '06:00'), createTreino('08/12', '(Ter)', '07:30'), createTreino('08/12', '(Ter)', '17:40'),
+            createTreino('09/12', '(Qua)', '06:00'), createTreino('09/12', '(Qua)', '07:30'), createTreino('09/12', '(Qua)', '12:15'), createTreino('09/12', '(Qua)', '17:40'),
+            createTreino('10/12', '(Qui)', '06:00'), createTreino('10/12', '(Qui)', '07:30'), createTreino('10/12', '(Qui)', '17:40'),
+            // Dia 11: Sexta-feira com Viagem Volta Ilhabela, mas pode ter treino em BSB? Vou manter.
+            createTreino('11/12', '(Sex)', '06:00'), createTreino('11/12', '(Sex)', '07:30'), createTreino('11/12', '(Sex)', '12:15'), createTreino('11/12', '(Sex)', '17:40'),
+            createEspecial('12/12', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('12/12', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('12/12', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            // Dia 13: Apenas chegada da volta a ilha, sem remada contemplativa
+
+            // Semana 3 (14-20)
+            createTreino('14/12', '(Seg)', '06:00'), createTreino('14/12', '(Seg)', '07:30'), createTreino('14/12', '(Seg)', '12:15'), createTreino('14/12', '(Seg)', '17:40'),
+            createTreino('15/12', '(Ter)', '06:00'), createTreino('15/12', '(Ter)', '07:30'), createTreino('15/12', '(Ter)', '17:40'),
+            createTreino('16/12', '(Qua)', '06:00'), createTreino('16/12', '(Qua)', '07:30'), createTreino('16/12', '(Qua)', '12:15'), createTreino('16/12', '(Qua)', '17:40'),
+            createTreino('17/12', '(Qui)', '06:00'), createTreino('17/12', '(Qui)', '07:30'), createTreino('17/12', '(Qui)', '17:40'),
+            createTreino('18/12', '(Sex)', '06:00'), createTreino('18/12', '(Sex)', '07:30'), createTreino('18/12', '(Sex)', '12:15'), createTreino('18/12', '(Sex)', '17:40'),
+            createEspecial('19/12', '(Sáb)', '05:00', 'Remada do Nascer do Sol', 'Energia', '/lualua.jpg', ''),
+            createEspecial('19/12', '(Sáb)', '09:30', 'Remada Contemplativa CPP', 'Lazer', '/cpplua.jpeg', ''),
+            createEspecial('19/12', '(Sáb)', '17:40', 'Remada Pôr do Sol', 'Visual', '/lualua2.jpg', ''),
+            createEspecial('20/12', '(Dom)', '11:00', 'Remada Contemplativa', 'Lazer', '/cpplua.jpeg', ''),
+
+            // Semana 4 (21-26) - Natal
+            createTreino('21/12', '(Seg)', '06:00'), createTreino('21/12', '(Seg)', '07:30'), createTreino('21/12', '(Seg)', '12:15'), createTreino('21/12', '(Seg)', '17:40'),
+            createTreino('22/12', '(Ter)', '06:00'), createTreino('22/12', '(Ter)', '07:30'), createTreino('22/12', '(Ter)', '17:40'),
+            createTreino('23/12', '(Qua)', '06:00'), createTreino('23/12', '(Qua)', '07:30'), createTreino('23/12', '(Qua)', '12:15'), createTreino('23/12', '(Qua)', '17:40'),
+            // Dia 24 (Véspera): Apenas manhã
+            createTreino('24/12', '(Qui)', '06:00'), createTreino('24/12', '(Qui)', '07:30'),
+
         ]
     }
 ]
 
+// Função que apenas processa os dados manuais para o formato final
 const generateAllEvents = (): Evento[] => {
     const events: Evento[] = []
 
-    // 1. Adicionar eventos manuais (Experiências e Luas)
-    eventosEspeciais.forEach(grupo => {
+    rawData.forEach(grupo => {
         grupo.eventos.forEach((ev, idx) => {
+            // O ano vem do grupo (2026)
             const dateString = `${ev.dataStr}/${grupo.year}`
+            // parse do date-fns para criar objeto Date
             const dateObj = parse(dateString, 'dd/MM/yyyy', new Date())
+
             if (isValid(dateObj)) {
                 events.push({
-                    id: `esp-${grupo.mes}-${idx}`,
+                    id: `${grupo.mes}-${idx}`,
                     dateObj,
                     dataDisplay: `${ev.dataStr} ${ev.diaSemana}`,
                     horario: ev.horario,
@@ -350,84 +770,11 @@ const generateAllEvents = (): Evento[] => {
         })
     })
 
-    // 2. Gerar Treinos de Rotina para O ANO TODO (Jan a Dez 2026)
-    // 0 = Jan, 11 = Dez
-    const mesesParaGerar = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-
-    mesesParaGerar.forEach(mesIndex => {
-        const ano = 2026
-        const diasNoMes = new Date(ano, mesIndex + 1, 0).getDate()
-
-        for (let d = 1; d <= diasNoMes; d++) {
-            const currentData = new Date(ano, mesIndex, d)
-            const diaSemana = getDay(currentData)
-            const diaMes = getDate(currentData)
-
-            // Lógica Específica para DEZEMBRO (Feriados e Recessos)
-            if (mesIndex === 11) { // Dezembro
-                // Dia 24: Véspera de Natal (Só manhã)
-                if (diaMes === 24) {
-                    const horariosManha = ['06:00', '07:30']
-                    horariosManha.forEach((horario, idx) => {
-                        events.push({
-                            id: `treino-${mesIndex}-${d}-${idx}`,
-                            dateObj: currentData,
-                            dataDisplay: `${format(currentData, 'dd/MM', { locale: ptBR })} ${format(currentData, '(EEE)', { locale: ptBR })}`,
-                            horario: horario,
-                            atividade: `Treino CPP ${horario}`,
-                            badge: 'Treino',
-                            imagem: '/cpplua.jpeg',
-                            descricao: 'Treino regular matinal.'
-                        })
-                    })
-                    continue; // Pula a geração padrão para este dia
-                }
-
-                // Dias sem treino: Natal (25), Recesso (26-31)
-                const diasSemTreino = [25, 26, 27, 28, 29, 30, 31] // Ajuste fino conforme imagem (26-31 vazio)
-                // Na imagem, 28, 29, 30 parecem ter treinos normais se forem dias úteis, mas 31 é vazio.
-                // Correção visual: 25 e 31 vazios. 26/27 fds sem treino extra.
-                if (diaMes === 25 || diaMes === 31) continue;
-            }
-
-            // Geração Padrão (Sem pular outros feriados)
-            if (diaSemana >= 1 && diaSemana <= 5) {
-                const diaFormatado = format(currentData, 'dd/MM', { locale: ptBR })
-                const diaSemanaStr = format(currentData, '(EEE)', { locale: ptBR })
-                let horariosDoDia: string[] = []
-
-                if (mesIndex === 0) {
-                    // JANEIRO
-                    horariosDoDia = ['06:00', '07:30', '12:15']
-                } else {
-                    // FEVEREIRO A DEZEMBRO (Padrão 2026)
-                    if (diaSemana === 1 || diaSemana === 3 || diaSemana === 5) { // Seg, Qua, Sex
-                        horariosDoDia = ['06:00', '07:30', '12:15', '17:40']
-                    }
-                    else { // Ter, Qui
-                        horariosDoDia = ['06:00', '07:30', '17:40']
-                    }
-                }
-
-                horariosDoDia.forEach((horario, idx) => {
-                    events.push({
-                        id: `treino-${mesIndex}-${d}-${idx}`,
-                        dateObj: currentData,
-                        dataDisplay: `${diaFormatado} ${diaSemanaStr}`,
-                        horario: horario,
-                        atividade: `Treino CPP ${horario}`,
-                        badge: 'Treino',
-                        imagem: '/cpplua.jpeg',
-                        descricao: 'Treino regular de Canoa Havaiana.'
-                    })
-                })
-            }
-        }
-    })
-
+    // Ordenar cronologicamente
     return events.sort((a, b) => {
         const dateDiff = a.dateObj.getTime() - b.dateObj.getTime()
         if (dateDiff !== 0) return dateDiff
+        // Ordena por horário se for o mesmo dia
         return a.horario.localeCompare(b.horario)
     })
 }

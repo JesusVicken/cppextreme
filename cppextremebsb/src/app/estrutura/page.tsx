@@ -76,7 +76,7 @@ const estruturaData = [
         icon: <AlarmClock className="h-6 w-6 text-rose-600" />,
         title: 'Flexibilidade de horários',
         description:
-            'Aulas em diferentes horários para encaixar sua remada na rotina.',
+            'Remadas em diferentes horários para encaixar sua remada na rotina.',
     },
     {
         icon: <Handshake className="h-6 w-6 text-violet-600" />,
@@ -86,9 +86,9 @@ const estruturaData = [
     },
     {
         icon: <GraduationCap className="h-6 w-6 text-orange-600" />,
-        title: 'Professores capacitados',
+        title: 'Instrutores capacitados',
         description:
-            'Professores prontos para guiar sua experiência de forma segura e empolgante.',
+            'Instrutores prontos para guiar sua experiência de forma segura e empolgante.',
     },
 ]
 
@@ -102,7 +102,7 @@ export default function EstruturaClubeCompleta() {
                     <div className="relative h-72 w-full mb-16 rounded-lg overflow-hidden md:h-96" data-aos="fade-up">
                         <Image
                             src="/ascade.jpg"
-                            alt="Clube ASCADE - Local das aulas de canoa havaiana"
+                            alt="Clube ASCADE - Local das remadas de canoa havaiana"
                             fill
                             className="object-cover"
                             quality={80}

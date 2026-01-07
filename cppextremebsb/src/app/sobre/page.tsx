@@ -198,7 +198,7 @@ export default function SobrePage() {
                             className="object-cover transition-all duration-700 scale-100 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-all duration-500 flex flex-col justify-end p-8">
-                            <h3 className="text-2xl font-bold uppercase mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Aulas Regulares</h3>
+                            <h3 className="text-2xl font-bold uppercase mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Remadas Regulares</h3>
                             <p className="text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 text-sm">
                                 Treinos de segunda a sábado para todos os níveis. Técnica e condicionamento.
                             </p>

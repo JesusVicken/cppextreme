@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export function Hero() {
     const whatsappMessage = encodeURIComponent(
-        "Olá, visitei o site da CPP Extreme Brasília e gostaria de mais informações sobre as aulas de canoa havaiana!"
+        "Olá, visitei o site da CPP Extreme Brasília e gostaria de mais informações sobre as remadas de canoa havaiana!"
     )
 
     return (
