@@ -2,6 +2,7 @@
 
 import { Parallax } from 'react-scroll-parallax'
 import { WhatsappLogo } from '@phosphor-icons/react'
+import Image from 'next/image'
 
 export default function Projects() {
     return (
@@ -23,12 +24,13 @@ export default function Projects() {
                 </div>
             </Parallax>
 
+            {/* Overlay e Conteúdo Principal */}
             <div
                 className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center z-10 px-4 space-y-8"
                 data-aos="fade-up"
                 data-aos-delay="300"
             >
-                <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold text-center max-w-3xl px-4">
+                <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold text-center max-w-3xl px-4 drop-shadow-lg">
                     Entre no nosso grupo e fique por dentro da programação de passeios e experiências do CPP Extreme BSB
                 </h2>
 
@@ -48,6 +50,29 @@ export default function Projects() {
                         <WhatsappLogo weight="fill" className="w-7 h-7" />
                         <span>Entrar no grupo</span>
                     </a>
+                </div>
+
+                {/* --- ÁREA DO WELLHUB --- */}
+                {/* Posicionei um pouco mais para cima (bottom-12) para dar respiro */}
+                <div
+                    className="absolute bottom-12 flex flex-col items-center gap-3"
+                    data-aos="fade-in"
+                    data-aos-delay="900"
+                >
+                    <span className="text-white/80 text-xs md:text-sm uppercase tracking-[0.2em] font-semibold drop-shadow-md">
+                        NOSSO NOVO PARCEIRO
+                    </span>
+
+                    {/* Aumentei significativamente o tamanho aqui */}
+                    <div className="-mt-4 md:-mt-26 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                        <Image
+                            src="/wellhub-logo.svg"
+                            alt="Wellhub"
+                            width={500}
+                            height={150}
+                            className="object-contain drop-shadow-2xl h-20 md:h-62 w-auto"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

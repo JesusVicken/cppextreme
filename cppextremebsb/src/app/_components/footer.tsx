@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image"
 import {
   FacebookLogo,
@@ -5,7 +7,6 @@ import {
   YoutubeLogo,
   WhatsappLogo,
 } from "@phosphor-icons/react/dist/ssr"
-import { Anchor } from "lucide-react"
 
 import ascadeLogo from "../../../public/logo-ascade.png"
 import canoMAMALogo from "../../../public/canoMAMAlogo.png"
@@ -13,6 +14,7 @@ import canoMAMALogo from "../../../public/canoMAMAlogo.png"
 const brands = [
   { name: "Ascade", logo: ascadeLogo },
   { name: "CanoMAMA", logo: canoMAMALogo },
+  { name: "Wellhub", logo: "/wellhub-logo.svg" },
 ]
 
 export function Footer() {
@@ -34,28 +36,30 @@ export function Footer() {
             Nossos Parceiros
           </h4>
 
-          <div className="flex flex-wrap justify-center gap-8">
-            {brands.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white p-4 rounded-lg flex items-center justify-center shadow-md"
-              >
-                <Image
-                  src={item.logo}
-                  alt={item.name}
-                  width={150}
-                  height={80}
-                  quality={100}
-                  className="object-contain"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "150px",
-                    maxHeight: "80px",
-                  }}
-                />
-              </div>
-            ))}
+          <div className="flex flex-wrap justify-center gap-8 items-center">
+            {brands.map((item, index) => {
+              const isWellhub = item.name === "Wellhub"
+
+              return (
+                <div
+                  key={index}
+                  className={`bg-white rounded-xl flex items-center justify-center shadow-md hover:scale-105 transition-transform duration-300 w-48 h-32 ${isWellhub ? "p-2" : "p-6"
+                    }`}
+                >
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <Image
+                      src={item.logo}
+                      alt={item.name}
+                      width={180}
+                      height={100}
+                      quality={100}
+                      className={`object-contain max-h-full max-w-full ${isWellhub ? "scale-125" : ""
+                        }`}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
@@ -83,7 +87,6 @@ export function Footer() {
           {/* Contatos */}
           <div data-aos="flip-up" className="space-y-4">
             <h3 className="text-2xl font-semibold">Contatos</h3>
-            {/* <p>Email: contato@cppextreme.com.br</p> */}
             <p className="text-gray-300">Telefone: (61) 99821-9177</p>
             <p className="text-gray-300">
               Ascade - Associação dos Servidores da Câmara dos Deputados 📍
@@ -127,16 +130,16 @@ export function Footer() {
         </footer>
       </div>
 
-      {/* Google Maps */}
-      <div className="w-full h-[300px] md:h-[400px] lg:h-[450px]">
+      {/* Google Maps com Pino no CPP Extreme */}
+      <div className="w-full h-[300px] md:h-[400px] lg:h-[450px] relative z-0">
         <iframe
-          title="Localização CPP Extreme na Ascade"
-          src="https://www.google.com/maps?q=Ascade+-+Associa%C3%A7%C3%A3o+dos+Servidores+da+C%C3%A2mara+dos+Deputados,+Bras%C3%ADlia+-+DF&output=embed"
+          title="Localização CPP Extreme"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.297405626388!2d-47.85451242499684!3d-15.818687484823482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a25c82d57ad6d%3A0xf59dbb7e8c7889a9!2sCpp%20Extremo!5e0!3m2!1spt-BR!2sbr!4v1709666000000!5m2!1spt-BR!2sbr"
           width="100%"
           height="100%"
-          loading="lazy"
           style={{ border: 0 }}
           allowFullScreen
+          loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
