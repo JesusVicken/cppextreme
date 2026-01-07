@@ -279,6 +279,51 @@ const eventosEspeciais = [
             { dataStr: '31/10', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
             { dataStr: '31/10', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
         ]
+    },
+    {
+        mes: 'Novembro 2026',
+        year: 2026,
+        eventos: [
+            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '07/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '08/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '14/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '15/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '21/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '22/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '24/11', diaSemana: '(Ter)', horario: '16:20', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '24/11', diaSemana: '(Ter)', horario: '18:50', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '25/11', diaSemana: '(Qua)', horario: '20:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '26/11', diaSemana: '(Qui)', horario: '20:00', atividade: 'Remada da Lua Cheia 🌕', badge: 'Especial', imagem: '/lualua.jpg', descricao: 'Remada da Lua Cheia - CPP Extreme.' },
+            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '28/11', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '29/11', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+        ]
+    },
+    {
+        mes: 'Dezembro 2026',
+        year: 2026,
+        eventos: [
+            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '05/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '06/12', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+            { dataStr: '11/12', diaSemana: '(Sex)', horario: '10:00', atividade: 'Volta Ilhabela 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Expedição Volta à Ilha de Ilhabela.' },
+            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '12/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '13/12', diaSemana: '(Dom)', horario: '10:00', atividade: 'Volta Ilhabela - Chegada 🏝️', badge: 'Viagem', imagem: '/cpplua.jpeg', descricao: 'Chegada da expedição.' },
+            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '05:00', atividade: 'Remada do Nascer do Sol 🌅', badge: 'Energia', imagem: '/lualua.jpg', descricao: 'Nascer do sol.' },
+            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '09:30', atividade: 'Remada Contemplativa CPP', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Passeio relaxante.' },
+            { dataStr: '19/12', diaSemana: '(Sáb)', horario: '17:40', atividade: 'Remada Pôr do Sol', badge: 'Visual', imagem: '/lualua2.jpg', descricao: 'Golden hour.' },
+            { dataStr: '20/12', diaSemana: '(Dom)', horario: '11:00', atividade: 'Remada Contemplativa', badge: 'Lazer', imagem: '/cpplua.jpeg', descricao: 'Domingo relax.' },
+        ]
     }
 ]
 
@@ -318,6 +363,34 @@ const generateAllEvents = (): Evento[] => {
             const diaSemana = getDay(currentData)
             const diaMes = getDate(currentData)
 
+            // Lógica Específica para DEZEMBRO (Feriados e Recessos)
+            if (mesIndex === 11) { // Dezembro
+                // Dia 24: Véspera de Natal (Só manhã)
+                if (diaMes === 24) {
+                    const horariosManha = ['06:00', '07:30']
+                    horariosManha.forEach((horario, idx) => {
+                        events.push({
+                            id: `treino-${mesIndex}-${d}-${idx}`,
+                            dateObj: currentData,
+                            dataDisplay: `${format(currentData, 'dd/MM', { locale: ptBR })} ${format(currentData, '(EEE)', { locale: ptBR })}`,
+                            horario: horario,
+                            atividade: `Treino CPP ${horario}`,
+                            badge: 'Treino',
+                            imagem: '/cpplua.jpeg',
+                            descricao: 'Treino regular matinal.'
+                        })
+                    })
+                    continue; // Pula a geração padrão para este dia
+                }
+
+                // Dias sem treino: Natal (25), Recesso (26-31)
+                const diasSemTreino = [25, 26, 27, 28, 29, 30, 31] // Ajuste fino conforme imagem (26-31 vazio)
+                // Na imagem, 28, 29, 30 parecem ter treinos normais se forem dias úteis, mas 31 é vazio.
+                // Correção visual: 25 e 31 vazios. 26/27 fds sem treino extra.
+                if (diaMes === 25 || diaMes === 31) continue;
+            }
+
+            // Geração Padrão (Sem pular outros feriados)
             if (diaSemana >= 1 && diaSemana <= 5) {
                 const diaFormatado = format(currentData, 'dd/MM', { locale: ptBR })
                 const diaSemanaStr = format(currentData, '(EEE)', { locale: ptBR })
@@ -328,12 +401,10 @@ const generateAllEvents = (): Evento[] => {
                     horariosDoDia = ['06:00', '07:30', '12:15']
                 } else {
                     // FEVEREIRO A DEZEMBRO (Padrão 2026)
-                    // Seg, Qua, Sex: 06:00, 07:30, 12:15, 17:40
-                    if (diaSemana === 1 || diaSemana === 3 || diaSemana === 5) {
+                    if (diaSemana === 1 || diaSemana === 3 || diaSemana === 5) { // Seg, Qua, Sex
                         horariosDoDia = ['06:00', '07:30', '12:15', '17:40']
                     }
-                    // Ter, Qui: 06:00, 07:30, 17:40 (Sem 12:15)
-                    else {
+                    else { // Ter, Qui
                         horariosDoDia = ['06:00', '07:30', '17:40']
                     }
                 }
@@ -347,7 +418,7 @@ const generateAllEvents = (): Evento[] => {
                         atividade: `Treino CPP ${horario}`,
                         badge: 'Treino',
                         imagem: '/cpplua.jpeg',
-                        descricao: 'Treino regular de Canoa Havaiana. Foco em técnica, condicionamento e sincronia.'
+                        descricao: 'Treino regular de Canoa Havaiana.'
                     })
                 })
             }
