@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import Image from 'next/image'
@@ -224,16 +222,18 @@ export default function EstruturaClubeCompleta() {
                         viewport={{ once: true }}
                         className="h-[300px] w-full overflow-hidden rounded-xl shadow-lg md:h-[400px] lg:h-[450px]"
                     >
-                        <iframe
-                            title="Localização CPP Extreme na Ascade"
-                            src="https://www.google.com/maps?q=Ascade+-+Associação+dos+Servidores+da+Câmara+dos+Deputados,+Brasília+-+DF&output=embed"
-                            width="100%"
-                            height="100%"
-                            loading="lazy"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            referrerPolicy="no-referrer-when-downgrade"
-                        ></iframe>
+                        <div className="w-full h-[300px] md:h-[400px] lg:h-[450px] relative z-0">
+                            <iframe
+                                title="Localização CPP Extreme"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3839.297405626388!2d-47.85451242499684!3d-15.818687484823482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a25c82d57ad6d%3A0xf59dbb7e8c7889a9!2sCpp%20Extremo!5e0!3m2!1spt-BR!2sbr!4v1709666000000!5m2!1spt-BR!2sbr"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
                     </motion.div>
                 </div>
             </div>
