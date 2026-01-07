@@ -104,7 +104,8 @@ export default function SobrePage() {
                                 src="/cpp-sol.jpg"
                                 alt="Equipe CPP Extreme"
                                 fill
-                                className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105"
+                                // AJUSTE: Removido 'grayscale' e 'group-hover:grayscale-0'
+                                className="object-cover transition-all duration-700 ease-in-out scale-100 group-hover:scale-105"
                             />
                             {/* Borda decorativa */}
                             <div className="absolute inset-4 border border-white/20 z-10 pointer-events-none"></div>
@@ -193,7 +194,8 @@ export default function SobrePage() {
                             src="/regular.jpg"
                             alt="Aulas Regulares de Canoa"
                             fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                            // AJUSTE: Removido 'grayscale'
+                            className="object-cover transition-all duration-700 scale-100 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-all duration-500 flex flex-col justify-end p-8">
                             <h3 className="text-2xl font-bold uppercase mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Aulas Regulares</h3>
@@ -214,7 +216,8 @@ export default function SobrePage() {
                             src="/corporativo.jpg"
                             alt="Eventos Corporativos"
                             fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                            // AJUSTE: Removido 'grayscale'
+                            className="object-cover transition-all duration-700 scale-100 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-all duration-500 flex flex-col justify-end p-8">
                             <h3 className="text-2xl font-bold uppercase mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Corporativo</h3>
@@ -235,7 +238,8 @@ export default function SobrePage() {
                             src="/porsol.jpeg"
                             alt="Experiências CPP Extreme"
                             fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                            // AJUSTE: Removido 'grayscale'
+                            className="object-cover transition-all duration-700 scale-100 group-hover:scale-110"
                         />
                         <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-all duration-500 flex flex-col justify-end p-8">
                             <h3 className="text-2xl font-bold uppercase mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">Experiências</h3>
@@ -280,8 +284,8 @@ export default function SobrePage() {
                         </div>
                     </motion.div>
                 </div>
-                {/* Textura de fundo sutil */}
-                <div className="absolute top-0 left-0 w-full h-full bg-[url('/cpp-sol.jpg')] bg-cover opacity-5 grayscale pointer-events-none"></div>
+                {/* Textura de fundo sutil - AJUSTE: Removido 'grayscale' */}
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('/cpp-sol.jpg')] bg-cover opacity-5 pointer-events-none"></div>
             </section>
 
         </main>
