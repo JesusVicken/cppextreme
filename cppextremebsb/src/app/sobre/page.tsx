@@ -268,11 +268,11 @@ export default function SobrePage() {
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <a
-                                href="https://wa.me/5561998219177?text=Olá! Gostaria de agendar uma aula experimental na CPP Extreme."
+                                href="https://wa.me/5561998219177?text=Olá! Gostaria de agendar uma remada na CPP Extreme."
                                 target="_blank"
                                 className="px-8 py-4 bg-black text-white font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-xl hover:-translate-y-1"
                             >
-                                Agendar Aula Experimental
+                                Agendar Remada
                             </a>
                             <a
                                 href="https://wa.me/5561998219177?text=Olá! Gostaria de saber mais sobre os passeios e experiências."
