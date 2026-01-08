@@ -23,7 +23,7 @@ import experienciaImg from '../../../public/experienciacpp.jpg'
 import Image from "next/image"
 import { useEffect } from "react"
 import AOS from "aos"
-import "aos/dist/aos.css"
+
 
 const services = [
     {
@@ -35,7 +35,7 @@ const services = [
         image: canoa3Img
     },
     {
-        title: "Expedições e Viajens",
+        title: "Expedições e Viagens",
         description: "Passeios programados em grupo por rotas especiais com paradas em pontos turísticos, ideal para aventura e contato com a natureza.",
         duration: "Consultar disponibilidade",
         icon: <Route className="w-6 h-6 text-white" />,

@@ -13,18 +13,16 @@ export default function Home() {
   return (
     <main>
       <HeroSection />
+      <About />
       <ParallaxWrapper>
         <Projects />
       </ParallaxWrapper>
       <Hero />
-      <About />
-      {/* Envolve apenas os componentes que devem ter o botão do WhatsApp */}
       <WhatsappWrapper>
         <Tours />
         <Services />
         <CheckVaa />
         <Footer />
-        
       </WhatsappWrapper>
     </main>
   )
