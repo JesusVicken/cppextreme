@@ -76,7 +76,7 @@ export default function CheckVaa() {
                 <Card className="shadow-lg border-zinc-200">
                     <CardHeader>
                         <CardTitle className="text-2xl md:text-3xl font-bold text-zinc-900">
-                            Primeira Aula de Canoa Havaiana 🌊
+                            Primeira Remada de Canoa Havaiana 🌊
                         </CardTitle>
                         <CardDescription className="text-zinc-600">
                             Tudo que você precisa saber para remar com a gente!
@@ -92,7 +92,7 @@ export default function CheckVaa() {
                         <InfoRow
                             icon={<ClockIcon className="w-5 h-5 mt-1 text-green-600" />}
                             title="Horário:"
-                            content="Chegar com 10 minutos de antecedência. Aula com ~1h de duração."
+                            content="Chegar com 10 minutos de antecedência. Remada com ~1h de duração."
                         />
                         <InfoRow
                             icon={<MapPinIcon className="w-5 h-5 mt-1 text-red-600" />}
@@ -141,7 +141,7 @@ export default function CheckVaa() {
                                 </p>
                                 <Button variant="default" className="mt-2" asChild>
                                     <a
-                                        href="https://wa.me/5561998219177?text=Olá, gostaria de agendar minha primeira aula de canoa havaiana!"
+                                        href="https://wa.me/5561998219177?text=Olá, gostaria de agendar minha primeira remada de canoa havaiana!"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

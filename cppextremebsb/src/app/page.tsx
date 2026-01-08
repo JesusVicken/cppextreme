@@ -12,15 +12,15 @@ import HeroSection from "./_components/HeroSection"
 export default function Home() {
   return (
     <main>
-      <HeroSection />
-      <About />
-      <ParallaxWrapper>
-        <Projects />
-      </ParallaxWrapper>
-      <Hero />
       <WhatsappWrapper>
-        <Tours />
+        <HeroSection />
+        <About />
+        <ParallaxWrapper>
+          <Projects />
+        </ParallaxWrapper>
+        <Hero />
         <Services />
+        <Tours />
         <CheckVaa />
         <Footer />
       </WhatsappWrapper>

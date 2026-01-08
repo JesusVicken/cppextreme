@@ -18,45 +18,45 @@ import AOS from "aos"
 const weeklySchedule = [
     {
         day: "Segunda-feira",
-        description: "Treinos Regulares",
+        description: "Remadas Regulares",
         schedules: ["6:20", "7:40", "12:15"],
         image: canoa1Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Segunda-feira"
+        linkText: "Olá, gostaria de informações sobre os remadas de Segunda-feira"
     },
     {
         day: "Terça-feira",
-        description: "Treinos Regulares",
-        schedules: ["6:20", "7:40", "17:40" ],
+        description: "Remadas Regulares",
+        schedules: ["6:20", "7:40", "17:40"],
         image: canoa2Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Terça-feira"
+        linkText: "Olá, gostaria de informações sobre os remadas de Terça-feira"
     },
     {
         day: "Quarta-feira",
-        description: "Treinos Regulares",
+        description: "Remadas Regulares",
         schedules: ["6:20", "7:40", "12:15"],
         image: canoa3Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Quarta-feira"
+        linkText: "Olá, gostaria de informações sobre os remadas de Quarta-feira"
     },
     {
         day: "Quinta-feira",
-        description: "Treinos Regulares + Competição",
-        schedules: ["6:00 (Competição)", "7:40 (Regular)", "17:40 (Regular)" ],
+        description: "Remadas Regulares + Competição",
+        schedules: ["6:00 (Competição)", "7:40 (Regular)", "17:40 (Regular)"],
         image: canoa5Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Quinta-feira"
+        linkText: "Olá, gostaria de informações sobre os remadas de Quinta-feira"
     },
     {
         day: "Sexta-feira",
-        description: "Treinos Regulares",
+        description: "Remadas Regulares",
         schedules: ["6:20", "7:40", "12:15"],
         image: canoa6Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Sexta-feira"
+        linkText: "Olá, gostaria de informações sobre os remadas de Sexta-feira"
     },
     {
         day: "Sábado",
-        description: "Treinos + Turma Kids",
+        description: "Remadas + Turma Kids",
         schedules: ["7:30 (Competição)", "9:30 (Regular)", "11:30 (Kids)"],
         image: canoa4Img,
-        linkText: "Olá, gostaria de informações sobre os treinos de Sábado"
+        linkText: "Olá, gostaria de informações sobre os remadas de Sábado"
     }
 ]
 
@@ -83,7 +83,7 @@ export function Services() {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12" data-aos="fade-up">
                     <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-                        REMADAS ESCOLA
+                        HORÁRIO REMADAS ESCOLA
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto">
                         Confira nossos horários disponíveis por dia da semana
