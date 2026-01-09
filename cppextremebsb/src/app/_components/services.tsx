@@ -19,42 +19,42 @@ const weeklySchedule = [
     {
         day: "Segunda-feira",
         description: "Remadas Regulares",
-        schedules: ["6:20", "7:40", "12:15"],
+        schedules: ["6:00", "7:30", "12:15", "16:00", "17:40"],
         image: canoa1Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Segunda-feira"
     },
     {
         day: "Terça-feira",
         description: "Remadas Regulares",
-        schedules: ["6:20", "7:40", "17:40"],
+        schedules: ["6:00", "7:30", "16:00", "17:40"],
         image: canoa2Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Terça-feira"
     },
     {
         day: "Quarta-feira",
         description: "Remadas Regulares",
-        schedules: ["6:20", "7:40", "12:15"],
+        schedules: ["6:00", "7:30", "12:15", "16:00", "17:40"],
         image: canoa3Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Quarta-feira"
     },
     {
         day: "Quinta-feira",
         description: "Remadas Regulares + Competição",
-        schedules: ["6:00 (Competição)", "7:40 (Regular)", "17:40 (Regular)"],
+        schedules: ["6:00", "7:30", "16:00", "17:40"],
         image: canoa5Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Quinta-feira"
     },
     {
         day: "Sexta-feira",
         description: "Remadas Regulares",
-        schedules: ["6:20", "7:40", "12:15"],
+        schedules: ["6:00", "7:30", "12:15", "16:00", "17:40"],
         image: canoa6Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Sexta-feira"
     },
     {
         day: "Sábado",
-        description: "Remadas + Turma Kids",
-        schedules: ["7:30 (Competição)", "9:30 (Regular)", "11:30 (Kids)"],
+        description: "Remadas Regulares",
+        schedules: ["7:20", "9:40"],
         image: canoa4Img,
         linkText: "Olá, gostaria de informações sobre os remadas de Sábado"
     }
