@@ -7,8 +7,6 @@ import { motion } from 'framer-motion'
 import { Clock, Calendar, ChevronRight, MessageCircle, MapPin } from 'lucide-react'
 import { WhatsappLogo } from '@phosphor-icons/react'
 import AOS from 'aos'
-import 'aos/dist/aos.css'
-
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
