@@ -113,12 +113,12 @@ export default function SchedulesPage() {
                             </div>
                         </div>
 
-                        <Badge variant="outline" className="text-white border-white/30 bg-white/10 backdrop-blur-md mb-6 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em]">
+                        <Badge variant="outline" className="text-white border-white/30 bg-white/10 backdrop-blur-md mb-6 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em]">
                             Grade Semanal
                         </Badge>
 
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tighter drop-shadow-lg">
-                            HORÁRIOS & <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 to-zinc-500">TURMAS</span>
+                            HORÁRIOS & <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 to-zinc-500 pr-2">TURMAS</span>
                         </h1>
 
                         <div className="flex items-center gap-2 text-zinc-300 text-sm md:text-base font-light bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
@@ -197,10 +197,25 @@ export default function SchedulesPage() {
                     transition={{ delay: 0.4 }}
                     className="mt-16 mb-12"
                 >
-                    <div className="bg-zinc-900 rounded-3xl p-8 md:p-12 text-center max-w-4xl mx-auto relative overflow-hidden shadow-2xl">
-                        {/* Efeito de fundo */}
-                        <div className="absolute top-0 left-0 w-full h-full bg-[url('/bgremo.webp')] opacity-10 bg-cover bg-center mix-blend-overlay pointer-events-none" />
+                    {/* Removido 'bg-zinc-900' e adicionado a estrutura de imagem de fundo */}
+                    <div className="rounded-3xl p-8 md:p-12 text-center max-w-4xl mx-auto relative overflow-hidden shadow-2xl">
 
+                        {/* 1. Imagem de Fundo */}
+                        <div className="absolute inset-0 z-0">
+                            <Image
+                                src="/cppgopro.jpg"
+                                alt="Turma CPP Extreme na Canoa"
+                                fill
+                                className="object-cover"
+                                quality={90}
+                            />
+                        </div>
+
+                        {/* 2. Overlay Escuro para garantir leitura do texto branco */}
+                        {/* Ajuste a opacidade (ex: bg-black/60 ou bg-black/80) conforme a necessidade */}
+                        <div className="absolute inset-0 bg-black/70 z-0" />
+
+                        {/* Conteúdo (z-10 para ficar acima da imagem e do overlay) */}
                         <div className="relative z-10 flex flex-col items-center">
                             <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/10 text-white mb-6 backdrop-blur-sm border border-white/20">
                                 <MessageCircle className="w-7 h-7" />
@@ -208,11 +223,11 @@ export default function SchedulesPage() {
                             <h3 className="text-2xl md:text-3xl font-black text-white mb-4">
                                 Qual é a turma ideal para você?
                             </h3>
-                            <p className="text-zinc-400 mb-8 max-w-lg text-lg leading-relaxed">
+                            <p className="text-zinc-300 mb-8 max-w-lg text-lg leading-relaxed font-medium">
                                 Nossos instrutores avaliam seu nível técnico e condicionamento para indicar a melhor turma. Comece do jeito certo.
                             </p>
                             <Link href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank">
-                                <Button variant="outline" className="h-12 px-8 rounded-xl border-white/20 bg-transparent text-white hover:bg-white hover:text-zinc-900 font-bold tracking-wide transition-all uppercase text-sm">
+                                <Button variant="outline" className="h-12 px-8 rounded-xl border-white/20 bg-white/10 text-white hover:bg-white hover:text-zinc-900 font-bold tracking-wide transition-all uppercase text-sm backdrop-blur-sm">
                                     Falar com um Instrutor
                                 </Button>
                             </Link>

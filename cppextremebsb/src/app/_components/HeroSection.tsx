@@ -9,11 +9,11 @@ export default function HeroSection() {
 
     const carouselItems = [
         {
-            subtitle: 'CPP EXTREME',
+            subtitle: 'CPP EXTREME BSB',
             title: 'SUPERE-SE TODOS OS DIAS',
         },
         {
-            subtitle: 'AVENTURA',
+            subtitle: 'LAGO PARANÓA',
             title: 'CONEXÃO COM A NATUREZA',
         },
         {
