@@ -110,7 +110,7 @@ export default function PlanosSection() {
             nome: '1 Remada Avulsa',
             preco: 'R$ 50 / 70',
             periodo: '/aula',
-            imagem: '/avulso1.jpg',
+            imagem: '/cpp-sol.jpg',
             beneficios: [
                 'Seg a Sex: R$ 50,00',
                 'Sáb, Dom e Feriado: R$ 70,00',
@@ -122,7 +122,7 @@ export default function PlanosSection() {
             nome: '5 Remadas Avulsas',
             preco: 'R$ 185',
             periodo: '/pacote',
-            imagem: '/avulso2.jpg',
+            imagem: '/sol.jpg',
             beneficios: [
                 'Validade de 2 meses',
                 'Flexibilidade total'
@@ -132,7 +132,7 @@ export default function PlanosSection() {
             nome: '10 Remadas Avulsas',
             preco: 'R$ 355',
             periodo: '/pacote',
-            imagem: '/avulso3.jpg',
+            imagem: '/cppbanner.jpg',
             beneficios: [
                 'Validade de 3 meses',
                 'Melhor custo-benefício'
