@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { useEffect } from 'react'
 import AOS from 'aos'
+import 'aos/dist/aos.css'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
@@ -103,13 +104,13 @@ export default function PlanosSection() {
         },
     ]
 
-    // DADOS AVULSOS (Atualizado com Imagens e Validade Nova)
+    // DADOS AVULSOS
     const planosAvulsos = [
         {
             nome: '1 Remada Avulsa',
             preco: 'R$ 50 / 70',
             periodo: '/aula',
-            imagem: '/cppbanner.jpg', // FOTO FAKE 1
+            imagem: '/avulso1.jpg',
             beneficios: [
                 'Seg a Sex: R$ 50,00',
                 'Sáb, Dom e Feriado: R$ 70,00',
@@ -121,9 +122,9 @@ export default function PlanosSection() {
             nome: '5 Remadas Avulsas',
             preco: 'R$ 185',
             periodo: '/pacote',
-            imagem: '/canoa4.jpg', // FOTO FAKE 2
+            imagem: '/avulso2.jpg',
             beneficios: [
-                'Validade de 2 meses', // Validade ajustada
+                'Validade de 2 meses',
                 'Flexibilidade total'
             ]
         },
@@ -131,9 +132,9 @@ export default function PlanosSection() {
             nome: '10 Remadas Avulsas',
             preco: 'R$ 355',
             periodo: '/pacote',
-            imagem: '/sol.jpg', // FOTO FAKE 3
+            imagem: '/avulso3.jpg',
             beneficios: [
-                'Validade de 3 meses', // Validade ajustada
+                'Validade de 3 meses',
                 'Melhor custo-benefício'
             ]
         }
@@ -367,7 +368,8 @@ export default function PlanosSection() {
                                         : 'bg-white border-gray-200 hover:border-gray-300'
                                     }
                                 `}
-                                whileHover={{ y: -4, shadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
+                                // CORREÇÃO AQUI: boxShadow em vez de shadow
+                                whileHover={{ y: -4, boxShadow: "0 10px 30px -10px rgba(0,0,0,0.1)" }}
                             >
                                 <div className="text-center mb-4 pb-2 border-b border-gray-100 group-hover:border-gray-200 transition-colors">
                                     <span className={`block text-xs font-bold uppercase tracking-widest mb-1 ${item.isWeekend ? 'text-primary' : 'text-gray-400'}`}>
