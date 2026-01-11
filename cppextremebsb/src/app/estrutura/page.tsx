@@ -124,7 +124,7 @@ export default function EstruturaClubeCompleta() {
                             Clube ASCADE
                         </Badge>
                         <h2 className="text-3xl md:text-5xl font-black text-black tracking-tight leading-tight mb-6 uppercase">
-                            O cenário perfeito para o seu <span className="underline decoration-4 underline-offset-4 decoration-black">treino diário.</span>
+                            O cenário perfeito para sua <span className="underline decoration-4 underline-offset-4 decoration-black">remada diária.</span>
                         </h2>
                         {/* Texto puramente preto */}
                         <p className="text-lg text-black leading-relaxed max-w-lg mb-6 font-medium">
@@ -139,6 +139,9 @@ export default function EstruturaClubeCompleta() {
                             </li>
                             <li className="flex items-center gap-3">
                                 <div className="w-2 h-2 bg-black" /> Áreas de convivência
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <div className="w-2 h-2 bg-black" /> Vestiário Completo
                             </li>
                         </ul>
                     </motion.div>
@@ -155,7 +158,7 @@ export default function EstruturaClubeCompleta() {
                             src="/vista_ascade.jpg"
                             alt="Vista panorâmica do Clube ASCADE"
                             fill
-                            className="object-cover transition-transform duration-700 group-hover:scale-105 grayscale hover:grayscale-0" // Efeito P&B que ganha cor no hover (opcional, pode deixar grayscale sempre)
+                            className="object-cover transition-transform duration-700 group-hover:scale-105 hover:grayscale-0" // Efeito P&B que ganha cor no hover (opcional, pode deixar grayscale sempre)
                             quality={100}
                             sizes="(max-width: 768px) 100vw, 50vw"
                         />
