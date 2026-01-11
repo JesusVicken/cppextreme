@@ -34,12 +34,11 @@ export default function Header() {
         { href: '/sobre', label: 'Sobre Nós' },
         { href: '/estrutura', label: 'Nossa Estrutura' },
         { href: '/horarios', label: 'Horários' },
-        { href: '/aulas', label: 'Aulas' },
         { href: '/planos', label: 'Planos' },
         { href: '/passeios', label: 'Passeios' },
         { href: '/agenda', label: 'Agenda' },
         { href: '/extreme', label: 'Extreme' },
-        { href: '/loja', label: 'Loja' }, // 👈 novo menu
+        { href: '/loja', label: 'Loja' },
         { href: '/contatos', label: 'Contato' },
     ]
 
