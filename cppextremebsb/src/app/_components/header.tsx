@@ -39,6 +39,7 @@ export default function Header() {
         { href: '/passeios', label: 'Passeios' },
         { href: '/agenda', label: 'Agenda' },
         { href: '/extreme', label: 'Extreme' },
+        { href: '/loja', label: 'Loja' }, // 👈 novo menu
         { href: '/contatos', label: 'Contato' },
     ]
 

@@ -53,24 +53,24 @@ export default function Projects() {
                 </div>
 
                 {/* --- ÁREA DO WELLHUB --- */}
-                {/* Posicionei um pouco mais para cima (bottom-12) para dar respiro */}
                 <div
                     className="absolute bottom-12 flex flex-col items-center gap-3"
                     data-aos="fade-in"
                     data-aos-delay="900"
                 >
-                    <span className="text-white/80 text-xs md:text-sm uppercase tracking-[0.2em] font-semibold drop-shadow-md">
+                    {/* Adicionei z-10 para garantir que o texto fique por cima da imagem se houver sobreposição */}
+                    <span className="relative z-10 text-white/80 text-xs md:text-sm uppercase tracking-[0.2em] font-semibold drop-shadow-md">
                         NOSSO NOVO PARCEIRO
                     </span>
 
-                    {/* Aumentei significativamente o tamanho aqui */}
-                    <div className="-mt-4 md:-mt-26 transition-transform duration-300 hover:scale-110 cursor-pointer">
+                    {/* CONFIGURAÇÃO ATUALIZADA (Igual ao HeroSection) */}
+                    <div className="-mt-14 md:-mt-20 transition-transform duration-300 hover:scale-110 cursor-pointer">
                         <Image
                             src="/wellhub-logo.svg"
                             alt="Wellhub"
                             width={500}
                             height={150}
-                            className="object-contain drop-shadow-2xl h-20 md:h-62 w-auto"
+                            className="object-contain drop-shadow-2xl h-50 md:h-62 w-auto -mt-4"
                         />
                     </div>
                 </div>
