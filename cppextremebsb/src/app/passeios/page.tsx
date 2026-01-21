@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import AOS from 'aos'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
+    CardFooter
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -19,18 +20,105 @@ import {
     Users,
     Info,
     MessageCircle,
-    ArrowRight,
-    Sparkles,
     AlertTriangle,
+    Wallet,
+    UploadCloud,
+    CheckCircle2,
+    Copy,
+    Check,
+    Clock
 } from 'lucide-react'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import Image from 'next/image'
 
+// IMPORTANTE: O caminho para o seu arquivo de upload que criamos antes.
+// Se der erro de caminho, tente mudar para: '../../planos/upload'
+import { uploadToDrive } from '@/app/planos/upload'
+
+// --- TYPES ---
+type PaymentStep = 'payment' | 'upload' | 'success';
+
+interface Experiencia {
+    nome: string;
+    descricao: string;
+    imagem: string;
+    preco: string;
+}
+
 export default function CppPage() {
+    // --- STATE MANAGEMENT ---
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [currentStep, setCurrentStep] = useState<PaymentStep>('payment')
+    const [selectedExperience, setSelectedExperience] = useState<Experiencia | null>(null)
+    const [receiptFile, setReceiptFile] = useState<File | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [copied, setCopied] = useState(false)
+
     useEffect(() => {
         AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' })
     }, [])
 
-    // Sistema de Níveis
+    // --- CONFIGURAÇÃO PIX ---
+    const GLOBAL_PIX_IMAGE = '/qrcode.jpg'
+    const GLOBAL_PIX_KEY = 'marcus.lopesss@gmail.com'
+    const GLOBAL_PIX_NAME = 'MARCUS LOPES GOMES'
+    const GLOBAL_GROUP_LINK = "https://chat.whatsapp.com/LteTVmibhZBB4hAjO6E6Dn"
+
+    // --- HANDLERS ---
+    const handleSelectExperience = (exp: Experiencia) => {
+        setSelectedExperience(exp)
+        setCurrentStep('payment')
+        setReceiptFile(null)
+        setIsModalOpen(true)
+    }
+
+    const handleCopyPix = () => {
+        navigator.clipboard.writeText(GLOBAL_PIX_KEY)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
+
+    const handleUploadReceipt = async () => {
+        if (!receiptFile || !selectedExperience) return
+
+        setIsLoading(true)
+
+        try {
+            const formData = new FormData()
+            formData.append('file', receiptFile)
+            // Usa o nome da experiência como identificador no arquivo
+            formData.append('plano', `EXP_${selectedExperience.nome}`)
+
+            const result = await uploadToDrive(formData)
+
+            if (result.success) {
+                setIsLoading(false)
+                setCurrentStep('success')
+            } else {
+                throw new Error(result.error || 'Erro desconhecido')
+            }
+
+        } catch (error) {
+            console.error("Erro no upload:", error)
+            setIsLoading(false)
+            alert("Ocorreu um erro ao enviar. Tente novamente.")
+        }
+    }
+
+    const handleJoinGroup = () => {
+        window.open(GLOBAL_GROUP_LINK, '_blank')
+        setIsModalOpen(false)
+    }
+
+    // --- DADOS ---
     const niveis = [
         {
             nivel: 'Nível 1',
@@ -38,7 +126,6 @@ export default function CppPage() {
             descricao: 'Para todos os públicos, sem exigência física.',
             caracteristicas: ['Duração: 1-2 horas', 'Águas calmas', 'Sem experiência prévia'],
             cor: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-            corBadge: 'bg-emerald-500',
         },
         {
             nivel: 'Nível 2',
@@ -46,7 +133,6 @@ export default function CppPage() {
             descricao: 'Exige condicionamento físico básico.',
             caracteristicas: ['Duração: 2-3 horas', 'Pequenas ondulações', 'Desafios leves'],
             cor: 'bg-blue-50 border-blue-200 text-blue-800',
-            corBadge: 'bg-blue-500',
         },
         {
             nivel: 'Nível 3',
@@ -54,7 +140,6 @@ export default function CppPage() {
             descricao: 'Exige boa condição física e experiência.',
             caracteristicas: ['Duração: 3-4 horas', 'Águas abertas', 'Técnica exigida'],
             cor: 'bg-amber-50 border-amber-200 text-amber-800',
-            corBadge: 'bg-amber-500',
         },
         {
             nivel: 'Nível 4',
@@ -62,7 +147,6 @@ export default function CppPage() {
             descricao: 'Para remadores experientes e atléticos.',
             caracteristicas: ['Duração: 4+ horas', 'Condições variáveis', 'Desafios físicos'],
             cor: 'bg-orange-50 border-orange-200 text-orange-800',
-            corBadge: 'bg-orange-500',
         },
         {
             nivel: 'Nível 5',
@@ -70,11 +154,9 @@ export default function CppPage() {
             descricao: 'Excepcional condicionamento físico necessário.',
             caracteristicas: ['Expedições multi-dia', 'Condições severas', 'Teste prévio'],
             cor: 'bg-rose-50 border-rose-200 text-rose-800',
-            corBadge: 'bg-rose-600',
         },
     ]
 
-    // Modalidades Canoagem
     const modalidades = [
         {
             titulo: 'Experiências Contemplativas',
@@ -83,36 +165,12 @@ export default function CppPage() {
             icone: <Moon className="w-6 h-6" />,
             corTema: 'text-indigo-600',
             experiencias: [
-                {
-                    nome: 'Remada da Lua Cheia',
-                    descricao: 'Remadas noturnas sob o luar com vista privilegiada do céu estrelado.',
-                    imagem: '/noite.jpg',
-                },
-                {
-                    nome: 'Remada Pôr do Sol',
-                    descricao: 'Aprecie o pôr do sol no lago com cores deslumbrantes.',
-                    imagem: '/por.jpg',
-                },
-                {
-                    nome: 'Remada Nascer do Sol',
-                    descricao: 'Comece o dia com energia renovada acompanhando o nascer do sol.',
-                    imagem: '/corporativo.jpg',
-                },
-                {
-                    nome: 'Remada com Meditação',
-                    descricao: 'Prática de mindfulness na canoa com instrutor especializado.',
-                    imagem: '/iniciante.jpg',
-                },
-                {
-                    nome: 'Remada Festiva',
-                    descricao: 'Eventos especiais com música, cultura e temas sazonais.',
-                    imagem: '/sol.jpg',
-                },
-                {
-                    nome: 'Remada 60+',
-                    descricao: 'Atividade segura e adaptada para participantes acima de 60 anos.',
-                    imagem: '/remadalinda.jpg',
-                },
+                { nome: 'Remada da Lua Cheia', preco: 'R$ 80,00', descricao: 'Remadas noturnas sob o luar com vista privilegiada.', imagem: '/noite.jpg' },
+                { nome: 'Remada Pôr do Sol', preco: 'R$ 70,00', descricao: 'Aprecie o pôr do sol no lago com cores deslumbrantes.', imagem: '/por.jpg' },
+                { nome: 'Remada Nascer do Sol', preco: 'R$ 70,00', descricao: 'Comece o dia com energia renovada.', imagem: '/corporativo.jpg' },
+                { nome: 'Remada com Meditação', preco: 'R$ 90,00', descricao: 'Prática de mindfulness na canoa com instrutor.', imagem: '/iniciante.jpg' },
+                { nome: 'Remada Festiva', preco: 'R$ 100,00', descricao: 'Eventos especiais com música e cultura.', imagem: '/sol.jpg' },
+                { nome: 'Remada 60+', preco: 'R$ 60,00', descricao: 'Atividade segura e adaptada para 60+.', imagem: '/remadalinda.jpg' },
             ],
         },
         {
@@ -122,21 +180,9 @@ export default function CppPage() {
             icone: <Activity className="w-6 h-6" />,
             corTema: 'text-teal-600',
             experiencias: [
-                {
-                    nome: 'Remada com Picnic',
-                    descricao: 'Remada + piquenique gourmet em ilha privativa.',
-                    imagem: '/experimental.jpg',
-                },
-                {
-                    nome: 'Remada com Yoga',
-                    descricao: 'Prática de yoga em plataforma flutuante com instrutor.',
-                    imagem: '/regular.jpg',
-                },
-                {
-                    nome: 'Remada até Ponte JK',
-                    descricao: 'Trajeto urbano com vista icônica da ponte mais famosa de Brasília.',
-                    imagem: '/canoa1.jpg',
-                },
+                { nome: 'Remada com Picnic', preco: 'R$ 120,00', descricao: 'Remada + piquenique gourmet em ilha privativa.', imagem: '/experimental.jpg' },
+                { nome: 'Remada com Yoga', preco: 'R$ 100,00', descricao: 'Prática de yoga em plataforma flutuante.', imagem: '/regular.jpg' },
+                { nome: 'Remada até Ponte JK', preco: 'R$ 90,00', descricao: 'Trajeto urbano com vista icônica.', imagem: '/canoa1.jpg' },
             ],
         },
         {
@@ -146,16 +192,8 @@ export default function CppPage() {
             icone: <Sun className="w-6 h-6" />,
             corTema: 'text-amber-600',
             experiencias: [
-                {
-                    nome: 'Remada até a Ermida',
-                    descricao: 'Trajeto de 12km até o santuário com parada para contemplação.',
-                    imagem: '/canoa3.jpg',
-                },
-                {
-                    nome: 'Remada até a Barragem',
-                    descricao: 'Desafio de 18km com vistas impressionantes da barragem.',
-                    imagem: '/canoa5.jpg',
-                },
+                { nome: 'Remada até a Ermida', preco: 'R$ 110,00', descricao: 'Trajeto de 12km até o santuário.', imagem: '/canoa3.jpg' },
+                { nome: 'Remada até a Barragem', preco: 'R$ 140,00', descricao: 'Desafio de 18km com vistas impressionantes.', imagem: '/canoa5.jpg' },
             ],
         },
         {
@@ -165,32 +203,13 @@ export default function CppPage() {
             icone: <Users className="w-6 h-6" />,
             corTema: 'text-rose-600',
             experiencias: [
-                {
-                    nome: 'Arraial à Corumbá',
-                    descricao: 'Expedição de 2 dias com pernoite em acampamento rústico (Nível 4).',
-                    imagem: '/corumba.jpg',
-                },
-                {
-                    nome: 'Porto Seguro à Arraial',
-                    descricao: 'Trajeto costeiro de 15km com paradas estratégicas (Nível 2).',
-                    imagem: '/porto.jpg',
-                },
-                {
-                    nome: 'Abrolhos',
-                    descricao: 'Remada em águas abertas com vida marinha (Nível 3).',
-                    imagem: '/abrolhos.jpg',
-                },
-                {
-                    nome: 'Praia do Forte',
-                    descricao: 'Trajeto com parada em praia isolada para banho e descanso (Nível 2).',
-                    imagem: '/forte.jpg',
-                },
+                { nome: 'Arraial à Corumbá', preco: 'R$ 450,00', descricao: 'Expedição de 2 dias com pernoite (Nível 4).', imagem: '/corumba.jpg' },
+                { nome: 'Porto Seguro à Arraial', preco: 'R$ 200,00', descricao: 'Trajeto costeiro de 15km (Nível 2).', imagem: '/porto.jpg' },
+                { nome: 'Abrolhos', preco: 'Sob Consulta', descricao: 'Remada em águas abertas (Nível 3).', imagem: '/abrolhos.jpg' },
+                { nome: 'Praia do Forte', preco: 'R$ 180,00', descricao: 'Trajeto com parada em praia isolada (Nível 2).', imagem: '/forte.jpg' },
             ],
         },
     ]
-
-    const whatsappNumber = '556198219177'
-    const whatsappLink = (msg: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`
 
     return (
         <div className="w-full max-w-[1400px] mx-auto px-4 py-12 md:py-20">
@@ -218,9 +237,6 @@ export default function CppPage() {
                             <Badge className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border-white/40 uppercase tracking-widest mb-4 px-4 py-1">
                                 Experiências CPP
                             </Badge>
-                            {/* <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-4">
-                                Conecte-se com <br /> a essência da água.
-                            </h1> */}
                             <p className="text-white/80 text-lg md:text-xl max-w-2xl font-medium">
                                 Descubra Brasília sob uma nova perspectiva em nossas canoas polinésias no Lago Paranoá.
                             </p>
@@ -229,7 +245,7 @@ export default function CppPage() {
                 </div>
             </div>
 
-            {/* --- INTRODUÇÃO (TEXTO SOLICITADO) --- */}
+            {/* --- INTRODUÇÃO --- */}
             <div className="max-w-4xl mx-auto text-center mb-24 space-y-6" data-aos="fade-up">
                 <h2 className="text-3xl font-bold tracking-tight text-foreground mb-4">
                     Nossos Passeios
@@ -237,9 +253,6 @@ export default function CppPage() {
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                     Nossos passeios são experiências guiadas de canoa polinésia que conectam <span className="font-bold text-foreground">corpo, água e coletivo</span>.
                     Cada saída é pensada para respeitar o ritmo do grupo, as condições do dia e o nível de experiência dos remadores.
-                </p>
-                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Para garantir segurança, fluidez e uma boa formação de canoa, todos os passeios são classificados por níveis, que indicam o grau de exigência física, técnica e o tempo de remada.
                 </p>
             </div>
 
@@ -290,6 +303,10 @@ export default function CppPage() {
                                                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                                            {/* Preço flutuante na imagem */}
+                                            <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-bold border border-white/20">
+                                                {exp.preco}
+                                            </div>
                                         </div>
 
                                         {/* Conteúdo */}
@@ -304,17 +321,14 @@ export default function CppPage() {
                                             </div>
 
                                             <div className="mt-auto pt-6">
-                                                <a
-                                                    href={whatsappLink(`Olá! Gostaria de agendar a experiência: *${exp.nome}*`)}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block w-full"
+                                                {/* Botão Modificado para abrir Modal de Pagamento */}
+                                                <Button
+                                                    onClick={() => handleSelectExperience(exp)}
+                                                    className="w-full rounded-xl py-6 font-bold text-md shadow-md hover:shadow-xl transition-all gap-2 cursor-pointer"
                                                 >
-                                                    <Button className="w-full rounded-xl py-6 font-bold text-md shadow-md hover:shadow-xl transition-all gap-2 cursor-pointer">
-                                                        <MessageCircle className="w-5 h-5" />
-                                                        Agendar Experiência
-                                                    </Button>
-                                                </a>
+                                                    <Wallet className="w-5 h-5" />
+                                                    Reservar Agora
+                                                </Button>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -325,38 +339,7 @@ export default function CppPage() {
                 ))}
             </div>
 
-            {/* --- CTA FINAL ---
-            <div className="mt-32 mb-20 max-w-7xl mx-auto" data-aos="zoom-in">
-                <div className="relative rounded-[2.5rem] bg-zinc-900 text-white overflow-hidden p-8 md:p-16 text-center shadow-2xl">
-                    <div className="absolute top-0 right-0 p-32 bg-primary/20 blur-[100px] rounded-full pointer-events-none" />
-                    <div className="absolute bottom-0 left-0 p-32 bg-blue-500/20 blur-[100px] rounded-full pointer-events-none" />
-
-                    <div className="relative z-10 max-w-4xl mx-auto space-y-8">
-                        <div className="inline-flex items-center justify-center p-4 bg-white/10 rounded-full backdrop-blur-sm mb-4">
-                            <Sparkles className="w-8 h-8 text-yellow-300" />
-                        </div>
-
-                        <h2 className="text-4xl md:text-6xl font-black tracking-tight">
-                            Sua aventura começa agora.
-                        </h2>
-                        <p className="text-xl text-zinc-300 max-w-2xl mx-auto">
-                            Não sabe qual nível escolher ou quer montar um grupo personalizado?
-                            Fale com nossa equipe.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                            <a href={whatsappLink('Olá! Gostaria de saber mais sobre as modalidades da CPP Extreme.')} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                                <Button size="lg" className="w-full sm:w-auto px-10 py-8 rounded-2xl text-lg font-bold bg-white text-black hover:bg-zinc-200 cursor-pointer">
-                                    Falar no WhatsApp
-                                    <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-
-            {/* --- NÍVEIS DE EXPERIÊNCIA (REFERÊNCIA NO FINAL) --- */}
+            {/* --- NÍVEIS DE EXPERIÊNCIA --- */}
             <div className="border-t border-border pt-20 pb-10 max-w-7xl mx-auto" id="niveis-info" data-aos="fade-up">
                 <div className="text-center mb-12">
                     <Badge variant="outline" className="mb-4">Informação Técnica</Badge>
@@ -408,6 +391,177 @@ export default function CppPage() {
                     <span>A classificação dos níveis pode ser alterada conforme as condições climáticas do dia.</span>
                 </div>
             </div>
+
+            {/* --- MODAL DE PAGAMENTO --- */}
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="sm:max-w-md md:max-w-lg p-0 overflow-hidden bg-white rounded-3xl border-0 shadow-2xl flex flex-col max-h-[90vh]">
+
+                    <div className="p-6 pb-2 relative z-10 bg-white shrink-0">
+                        <DialogHeader>
+                            <DialogTitle className="text-2xl font-black text-gray-900 flex items-center gap-2">
+                                {currentStep === 'payment' && <><Wallet className="text-primary w-6 h-6" /> Pagamento Pix</>}
+                                {currentStep === 'upload' && <><UploadCloud className="text-primary w-6 h-6" /> Comprovante</>}
+                                {currentStep === 'success' && <><CheckCircle2 className="text-green-500 w-6 h-6" /> Tudo Certo!</>}
+                            </DialogTitle>
+                            <DialogDescription className="truncate">
+                                {currentStep === 'payment' && `Reserva: ${selectedExperience?.nome} (${selectedExperience?.preco})`}
+                                {currentStep === 'upload' && "Envie o comprovante para confirmar sua aventura."}
+                                {currentStep === 'success' && "Sua experiência foi agendada!"}
+                            </DialogDescription>
+                        </DialogHeader>
+                    </div>
+
+                    <div className="px-6 pb-8 overflow-y-auto custom-scrollbar flex-1">
+                        <AnimatePresence mode="wait">
+
+                            {/* ETAPA 1: QR CODE PIX */}
+                            {currentStep === 'payment' && (
+                                <motion.div
+                                    key="payment"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 20 }}
+                                    className="flex flex-col items-center gap-4 pt-2"
+                                >
+                                    {/* ALERTA DE VALOR MANUAL */}
+                                    <div className="w-full bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-3 items-start">
+                                        <Info className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                                        <div className="text-sm text-amber-800">
+                                            <p className="font-bold">Valor da Experiência:</p>
+                                            <p>Realize o pagamento exato de <strong>{selectedExperience?.preco}</strong>.</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Box do QR Code */}
+                                    <div className="bg-white border-2 border-dashed border-gray-200 p-2 rounded-xl shadow-sm relative w-full flex justify-center bg-gray-50">
+                                        <div className="relative w-[240px] h-[340px] md:w-[280px] md:h-[400px]">
+                                            <Image
+                                                src={GLOBAL_PIX_IMAGE}
+                                                alt="QR Code Pix"
+                                                fill
+                                                className="object-contain rounded-md"
+                                                priority
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Copia e Cola */}
+                                    <div className="w-full space-y-2">
+                                        <Label htmlFor="pix-key" className="text-xs text-gray-500 font-semibold uppercase">Chave Pix (E-mail)</Label>
+                                        <div className="flex gap-2">
+                                            <Input
+                                                id="pix-key"
+                                                value={GLOBAL_PIX_KEY}
+                                                readOnly
+                                                className="bg-gray-50 font-mono text-sm text-gray-700 h-12"
+                                            />
+                                            <Button size="icon" className="h-12 w-12 shrink-0" onClick={handleCopyPix}>
+                                                {copied ? <Check className="w-5 h-5 text-green-200" /> : <Copy className="w-5 h-5" />}
+                                            </Button>
+                                        </div>
+                                        <p className="text-[10px] text-center text-gray-400 uppercase tracking-widest mt-1">
+                                            Destinatário: {GLOBAL_PIX_NAME}
+                                        </p>
+                                    </div>
+
+                                    <div className="w-full pt-2">
+                                        <Button className="w-full py-6 text-lg font-bold shadow-lg shadow-primary/20" onClick={() => setCurrentStep('upload')}>
+                                            Já fiz o pagamento
+                                            <ChevronRight className="ml-2 w-5 h-5" />
+                                        </Button>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* ETAPA 2: UPLOAD */}
+                            {currentStep === 'upload' && (
+                                <motion.div
+                                    key="upload"
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: 20 }}
+                                    className="flex flex-col items-center justify-center h-full pt-4 space-y-6"
+                                >
+                                    <div className="w-full">
+                                        <Label htmlFor="receipt" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Anexar Comprovante
+                                        </Label>
+                                        <div className="flex items-center justify-center w-full">
+                                            <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${receiptFile ? 'border-primary bg-primary/5' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'}`}>
+                                                <div className="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
+                                                    {receiptFile ? (
+                                                        <>
+                                                            <CheckCircle2 className="w-10 h-10 text-primary mb-3" />
+                                                            <p className="text-sm text-gray-600 font-semibold break-all">{receiptFile.name}</p>
+                                                            <p className="text-xs text-gray-500 mt-1">Clique para alterar</p>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <UploadCloud className="w-10 h-10 text-gray-400 mb-3" />
+                                                            <p className="text-sm text-gray-500"><span className="font-semibold">Toque para enviar</span></p>
+                                                            <p className="text-xs text-gray-400">Print ou PDF do banco</p>
+                                                        </>
+                                                    )}
+                                                </div>
+                                                <input
+                                                    id="dropzone-file"
+                                                    type="file"
+                                                    className="hidden"
+                                                    accept="image/*,application/pdf"
+                                                    onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
+                                                />
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div className="w-full space-y-3">
+                                        <Button
+                                            className="w-full py-6 font-bold"
+                                            disabled={!receiptFile || isLoading}
+                                            onClick={handleUploadReceipt}
+                                        >
+                                            {isLoading ? 'Enviando...' : 'Enviar Comprovante'}
+                                        </Button>
+                                        <Button variant="ghost" className="w-full text-xs text-gray-400 hover:text-gray-600" onClick={() => setCurrentStep('payment')}>
+                                            Voltar para Pagamento
+                                        </Button>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* ETAPA 3: SUCESSO */}
+                            {currentStep === 'success' && (
+                                <motion.div
+                                    key="success"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="flex flex-col items-center justify-center pt-8 text-center space-y-6"
+                                >
+                                    <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-2 animate-bounce">
+                                        <Check className="w-12 h-12 text-green-600" />
+                                    </div>
+
+                                    <div>
+                                        <h4 className="text-xl font-bold text-gray-900">Recebemos seu comprovante!</h4>
+                                        <p className="text-gray-500 mt-2 max-w-xs mx-auto text-sm">
+                                            Agora é só entrar no grupo VIP para combinar os detalhes da sua aventura.
+                                        </p>
+                                    </div>
+
+                                    <Button
+                                        className="w-full py-6 bg-green-600 hover:bg-green-700 text-white font-bold text-lg shadow-green-200 shadow-xl"
+                                        onClick={handleJoinGroup}
+                                    >
+                                        <MessageCircle className="mr-2 h-5 w-5 fill-current" />
+                                        Entrar no Grupo
+                                    </Button>
+                                </motion.div>
+                            )}
+
+                        </AnimatePresence>
+                    </div>
+                </DialogContent>
+            </Dialog>
 
         </div>
     )
