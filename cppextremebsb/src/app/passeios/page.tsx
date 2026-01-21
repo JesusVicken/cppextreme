@@ -102,6 +102,12 @@ export default function CppPage() {
             if (result.success) {
                 setIsLoading(false)
                 setCurrentStep('success')
+
+                // --- TRAVA DE SEGURANÇA: AUTO-REDIRECT ---
+                setTimeout(() => {
+                    window.open(GLOBAL_GROUP_LINK, '_blank')
+                }, 1500)
+
             } else {
                 throw new Error(result.error || 'Erro desconhecido')
             }
@@ -393,8 +399,30 @@ export default function CppPage() {
             </div>
 
             {/* --- MODAL DE PAGAMENTO --- */}
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-md md:max-w-lg p-0 overflow-hidden bg-white rounded-3xl border-0 shadow-2xl flex flex-col max-h-[90vh]">
+            <Dialog open={isModalOpen} onOpenChange={(open) => {
+                // TRAVA DE SEGURANÇA:
+                // Se estiver no passo 'success', impede o fechamento pelo 'onOpenChange' (clicar fora ou ESC)
+                // O usuário só pode fechar clicando no botão "Entrar no Grupo"
+                if (currentStep === 'success' && !open) {
+                    return;
+                }
+                setIsModalOpen(open);
+            }}>
+                <DialogContent
+                    className="sm:max-w-md md:max-w-lg p-0 overflow-hidden bg-white rounded-3xl border-0 shadow-2xl flex flex-col max-h-[90vh]"
+                    // Desabilita interação fora se estiver no sucesso
+                    onInteractOutside={(e) => {
+                        if (currentStep === 'success') {
+                            e.preventDefault();
+                        }
+                    }}
+                    // Desabilita ESC se estiver no sucesso
+                    onEscapeKeyDown={(e) => {
+                        if (currentStep === 'success') {
+                            e.preventDefault();
+                        }
+                    }}
+                >
 
                     <div className="p-6 pb-2 relative z-10 bg-white shrink-0">
                         <DialogHeader>
@@ -423,7 +451,6 @@ export default function CppPage() {
                                     exit={{ opacity: 0, x: 20 }}
                                     className="flex flex-col items-center gap-4 pt-2"
                                 >
-                                    {/* ALERTA DE VALOR MANUAL */}
                                     <div className="w-full bg-amber-50 border border-amber-200 rounded-lg p-3 flex gap-3 items-start">
                                         <Info className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                                         <div className="text-sm text-amber-800">
@@ -432,7 +459,6 @@ export default function CppPage() {
                                         </div>
                                     </div>
 
-                                    {/* Box do QR Code */}
                                     <div className="bg-white border-2 border-dashed border-gray-200 p-2 rounded-xl shadow-sm relative w-full flex justify-center bg-gray-50">
                                         <div className="relative w-[240px] h-[340px] md:w-[280px] md:h-[400px]">
                                             <Image
@@ -445,7 +471,6 @@ export default function CppPage() {
                                         </div>
                                     </div>
 
-                                    {/* Copia e Cola */}
                                     <div className="w-full space-y-2">
                                         <Label htmlFor="pix-key" className="text-xs text-gray-500 font-semibold uppercase">Chave Pix (E-mail)</Label>
                                         <div className="flex gap-2">
@@ -542,18 +567,21 @@ export default function CppPage() {
                                     </div>
 
                                     <div>
-                                        <h4 className="text-xl font-bold text-gray-900">Recebemos seu comprovante!</h4>
-                                        <p className="text-gray-500 mt-2 max-w-xs mx-auto text-sm">
-                                            Agora é só entrar no grupo VIP para combinar os detalhes da sua aventura.
+                                        <h4 className="text-xl font-bold text-gray-900">Comprovante Recebido!</h4>
+                                        <p className="text-gray-600 font-medium mt-2 max-w-xs mx-auto">
+                                            Redirecionando para o Grupo VIP...
+                                        </p>
+                                        <p className="text-gray-400 text-xs mt-1">
+                                            Se não abrir, clique no botão abaixo.
                                         </p>
                                     </div>
 
                                     <Button
-                                        className="w-full py-6 bg-green-600 hover:bg-green-700 text-white font-bold text-lg shadow-green-200 shadow-xl"
+                                        className="w-full py-6 bg-green-600 hover:bg-green-700 text-white font-bold text-lg shadow-green-200 shadow-xl animate-pulse"
                                         onClick={handleJoinGroup}
                                     >
                                         <MessageCircle className="mr-2 h-5 w-5 fill-current" />
-                                        Entrar no Grupo
+                                        Entrar no Grupo (Obrigatório)
                                     </Button>
                                 </motion.div>
                             )}
